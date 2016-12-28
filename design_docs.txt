@@ -1,0 +1,31 @@
+Udacity Project Reqs:
+    * Display a map of a neighborhood
+        * Display markers for specific points of interest
+        * On click
+            * Open details on map
+            * Animate map marker
+    * Display a list of points of interest
+        * On click
+            * Open details on map
+            * Animate map marker
+        * Allow filtering and searching of map marker list
+            * Searchable by text
+            * Filter by attribute
+    * Minimum 5 points of interest
+    * Utilizes Google Maps api
+    * Utilizes at least one other non-Google api
+    * All data requests are asynchronous
+    * Error handling:
+        * All basic functionality must be error-free
+        * If an error occures, either display gracefully
+        or no UI disruption
+            * No need to handle user going offline
+
+Stand-out Reqs:
+    * Allow user to 'favorite' a location
+    ** Incoorporate Grunt build process
+    ** Data persists when app is closed (localStorage)
+    ** Include additional apis beyond reqs
+    * Style markers differently depending on type
+    * Build a more robust filtering/searching tool
+
