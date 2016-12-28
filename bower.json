@@ -1,0 +1,28 @@
+{
+  "name": "Neighborhood-Map-Udacity",
+  "authors": [
+    "David House <davidhousedev@gmail.com>"
+  ],
+  "description": "",
+  "main": "index.html",
+  "keywords": [
+    "knockout",
+    "bootstrap",
+    "udacity"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^3.1.1",
+    "knockout": "^3.4.1",
+    "bootstrap": "4.0"
+  }
+}
