@@ -1,3 +1,10 @@
+Seattle Bike Shop Map
+Displays markers of seattle bike shops, and bike repair stations for South, North, and central Seattle.
+
+Features:
+    * Local Seattle bike paths are visable and can be toggled on or off
+    * The marker color of shops on the map is dependent on the shop's elevation
+
 Udacity Project Reqs:
     * Display a map of a neighborhood
         * Display markers for specific points of interest
@@ -17,8 +24,7 @@ Udacity Project Reqs:
     * All data requests are asynchronous
     * Error handling:
         * All basic functionality must be error-free
-        * If an error occures, either display gracefully
-        or no UI disruption
+        * If an error occures, either display gracefully or no UI disruption
             * No need to handle user going offline
 
 Stand-out Reqs:
@@ -29,3 +35,47 @@ Stand-out Reqs:
     * Style markers differently depending on type
     * Build a more robust filtering/searching tool
 
+MVVM Design:
+    Models:
+        * Bike shop
+            Properties:
+                name
+                latitude
+                longitude
+                elevation
+                placeID
+                address
+    ViewModel:
+        * Builds marker data array
+            * Queries places API
+            * Checks localstorage
+                * If localstorage contains 'favorite' by place_ID, add favorite property to place
+                * If elevation info in localstorage, add to place ID, else query for elevation
+            * Create marker, add to map, add to list
+        * On marker/listItem click:
+            * Get shop image:
+                * Query by place ID
+                * Get streetview image
+            * Get rating:
+                * Query google/yelp/forsquare rating
+            * Get reviews:
+                * Query Google/yelp(?)
+        * Handle sort/search of markers
+            * Search:
+                * On each keypress, display new set of results using Fuse.js
+
+
+Libraries:
+    Fuse.js:
+        Handles searching of points to narrow down results
+
+API Request design:
+    Google Maps Javascript API:
+
+    Google Places API (https://developers.google.com/maps/documentation/javascript/places#TextSearchRequests):
+        Search params:
+            type: 'bicycle_store'
+
+Data Storage:
+    * Stored in GeoJSON formatted .json file
+    *
