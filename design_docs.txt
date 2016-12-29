@@ -61,8 +61,16 @@ MVVM Design:
             * Get reviews:
                 * Query Google/yelp(?)
         * Handle sort/search of markers
-            * Search:
-                * On each keypress, display new set of results using Fuse.js
+            * Primary filter function - Runs at every keystroke, retrieves filters and search string
+                * By elevation - Get status of elevation radio button
+                * ? By price - Allow selection of number of $s in radio button
+                * ? By open time - Check current device time, compare to open hours for bike shop
+                * ? Closeby - Get current position, calculate lat/lon difference
+                * Search: Match to any text input
+    Map:
+        * Create map centered around downtown Seattle
+
+
 
 
 Libraries:
@@ -77,5 +85,7 @@ API Request design:
             type: 'bicycle_store'
 
 Data Storage:
-    * Stored in GeoJSON formatted .json file
+    * Previous searches Place IDs:
+        * Bool: Favorite
+        *
     *
