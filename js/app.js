@@ -1,3 +1,4 @@
+'use strict';
 
 var map;
 
@@ -16,7 +17,7 @@ function initMap() {
 
 
 $(function(){
-    'use strict';
+
 
     var ListMarker = function(data) {
         this.lat = ko.observable(data.lat || null);

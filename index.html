@@ -8,9 +8,10 @@
 
     <!-- Load dependencies -->
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="bower_components/knockout/dist/knockout.js"></script>
     <script src="bower_components/tether/dist/js/tether.min.js"></script>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="bower_components/knockout/dist/knockout.js"></script>
     <script src="bower_components/fuse.js/src/fuse.min.js"></script>
 
 
@@ -22,13 +23,21 @@
 
 </head>
 <body>
-
-    <div data-bind="foreach: markerData">
-        <div data-bind="text: name"></div>
-        <div data-bind="text: placeID"></div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12 col-sm-4">
+                <div data-bind="foreach: markerData">
+                    <div data-bind="text: name"></div>
+                    <div data-bind="text: placeID"></div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-8 map">
+                <div id="map"></div>
+            </div>
+        </div>
     </div>
 
-    <div id="map"></div>
+
 
 </body>
 </html>
