@@ -13,8 +13,10 @@
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="bower_components/fuse.js/src/fuse.min.js"></script>
 
-    <!-- Load application -->
-    <script src="js/app.js"></script>
+
+
+    <!-- Load CSS -->
+    <link rel="stylesheet" href="css/styles.css">
 
     <title>Seattle Bike Shops</title>
 
@@ -26,5 +28,13 @@
         <div data-bind="text: placeID"></div>
     </div>
 
+    <div id="map"></div>
+
 </body>
 </html>
+
+    <!-- Load application -->
+    <script src="js/app.js"></script>
+
+    <!-- Load map -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABqf6f1VCnwQoMNJnFaFelAfXiWu-08pA&callback=initMap&libraries=places,visualization" async defer></script>

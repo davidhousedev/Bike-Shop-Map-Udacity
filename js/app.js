@@ -1,4 +1,20 @@
 
+var map;
+
+function initMap() {
+    map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: -33.867, lng: 151.206},
+        zoom: 10,
+        stylers: [{
+            stylers: [{visibility: 'simplified'}]
+        }, {
+            elementType: 'labels',
+            stylers: [{visibility: 'off'}]
+        }]
+    });
+}
+
+
 $(function(){
     'use strict';
 
