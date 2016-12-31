@@ -7,8 +7,9 @@ html, body, .container-fluid, .row, .map {
     height: 100%;
 }
 
-/* html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-} */
+#elevLegend {
+    height: 20px;
+    width: 20px;
+    background-color: black;
+    display: none;
+}

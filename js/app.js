@@ -59,6 +59,11 @@ function initMap() {
     placeService = new google.maps.places.PlacesService(map);
     elevationService = new google.maps.ElevationService;
 
+    // Position custom legend. Starts hidden, and is shown if elevation
+    // data is successfully retrieved
+    var elevLegend = document.getElementById('elevLegend');
+    map.controls[google.maps.ControlPosition.LEFT_TOP].push(elevLegend)
+
     // Search for bike shops once map idle
     map.addListener('idle', getPlaceIDs);
 }
@@ -71,7 +76,7 @@ function getPlaceIDs() {
 
     var callback = function(data) {
         viewModel.clearList();
-        clearMapMarkers();
+        clearMap();
         data.forEach(function(place){
             createMarker(place);
             viewModel.markerData.push(place.place_id);
@@ -122,17 +127,25 @@ function updateMarkersElevation() {
             for (var i = 0; i < results.length; i++) {
                 var elevLatLng = results[i].location.toUrlValue(5);
                 var markerLatLng = mapMarkers[i].getPosition().toUrlValue(5);
-                console.log(markerLatLng, elevLatLng)
+                console.log(markerLatLng, elevLatLng);
                 if (elevLatLng == markerLatLng) {
                     if (results[i].elevation < elevationRanges[1]) {
-                        changeMapMarkerColor(mapMarkers[i], 'green')
+                        changeMapMarkerColor(mapMarkers[i], 'green');
+                        mapMarkers[i]['elevation'] = 'low';
                     } else if (results[i].elevation < elevationRanges[2]) {
-                        changeMapMarkerColor(mapMarkers[i], 'yellow')
+                        changeMapMarkerColor(mapMarkers[i], 'yellow');
+                        mapMarkers[i]['elevation'] = 'med';
                     } else {
-                        changeMapMarkerColor(mapMarkers[i], 'red')
+                        changeMapMarkerColor(mapMarkers[i], 'red');
+                        mapMarkers[i]['elevation'] = 'high';
                     }
                 }
+
             }
+            var $elevationLegend = $("#elevLegend");
+            $elevationLegend.find('#elevMax').text(elevationRanges[3]);
+            $elevationLegend.find('#elevMin').text(elevationRanges[0]);
+            $elevationLegend.css('display', 'block');
         }
     })
 }
@@ -140,7 +153,7 @@ function updateMarkersElevation() {
 
 
 function changeMapMarkerColor(marker, color){
-    marker.setIcon(markerIcon(color, color))
+    marker.setIcon(markerIcon(color, color));
 }
 
 function markerIcon(strokeColor, fillColor){
@@ -154,7 +167,8 @@ function markerIcon(strokeColor, fillColor){
     };
 }
 
-function clearMapMarkers() {
+function clearMap() {
+    // Hide and dereference any current map markers
     mapMarkers.forEach(function(marker){
         marker.setMap(null)
     });
