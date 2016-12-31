@@ -115,21 +115,32 @@ function updateMarkersElevation() {
         'locations': markerPositions,
     }, function(results, status) {
         if (status === 'OK') {
-            results.forEach(function(elevation){
-                console.log(elevation);
-            })
+            // Once elevation values have been returned for each marker,
+            // both the results array and the marker array are looped to
+            // verify equality and update the color of the marker
             var elevationRanges = getElevationRange(results);
-            console.log(elevationRanges);
+            for (var i = 0; i < results.length; i++) {
+                var elevLatLng = results[i].location.toUrlValue(5);
+                var markerLatLng = mapMarkers[i].getPosition().toUrlValue(5);
+                console.log(markerLatLng, elevLatLng)
+                if (elevLatLng == markerLatLng) {
+                    if (results[i].elevation < elevationRanges[1]) {
+                        changeMapMarkerColor(mapMarkers[i], 'green')
+                    } else if (results[i].elevation < elevationRanges[2]) {
+                        changeMapMarkerColor(mapMarkers[i], 'yellow')
+                    } else {
+                        changeMapMarkerColor(mapMarkers[i], 'red')
+                    }
+                }
+            }
         }
     })
 }
 
 
 
-function changeMapMarkerColor(color){
-    mapMarkers.forEach(function(marker){
-        marker.setIcon(markerIcon(color, color))
-    });
+function changeMapMarkerColor(marker, color){
+    marker.setIcon(markerIcon(color, color))
 }
 
 function markerIcon(strokeColor, fillColor){
