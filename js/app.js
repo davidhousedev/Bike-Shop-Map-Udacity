@@ -2,7 +2,7 @@
 
 var map;
 var placeService;
-/*var elevationService;*/
+var elevationService;
 var mapMarkers = [];
 
 
@@ -57,7 +57,7 @@ function initMap() {
     });
 
     placeService = new google.maps.places.PlacesService(map);
-    /*elevationService = new google.maps.ElevationService;*/
+    elevationService = new google.maps.ElevationService;
 
     // Search for bike shops once map idle
     map.addListener('idle', getPlaceIDs);
@@ -76,6 +76,8 @@ function getPlaceIDs() {
             createMarker(place);
             viewModel.markerData.push(place.place_id);
         });
+
+        updateMarkersElevation();
     };
 
     placeService.nearbySearch(request, callback);
@@ -103,10 +105,30 @@ function createMarker(place) {
     marker.setMap(map);
 }
 
+function updateMarkersElevation() {
+    var markerPositions = [];
+    mapMarkers.forEach(function(marker){
+        markerPositions.push(marker.getPosition())
+    });
+
+    elevationService.getElevationForLocations({
+        'locations': markerPositions,
+    }, function(results, status) {
+        if (status === 'OK') {
+            results.forEach(function(elevation){
+                console.log(elevation);
+            })
+            var elevationRanges = getElevationRange(results);
+            console.log(elevationRanges);
+        }
+    })
+}
+
+
+
 function changeMapMarkerColor(color){
     mapMarkers.forEach(function(marker){
-        marker.icon.strokeColor = color;
-        marker.setMap(map);
+        marker.setIcon(markerIcon(color, color))
     });
 }
 
@@ -127,3 +149,21 @@ function clearMapMarkers() {
     });
     mapMarkers = [];
 }
+
+/*
+ * Math helper
+ */
+
+function getElevationRange(elevationObjs) {
+    var elevations = [];
+    elevationObjs.forEach(function(elevationObj) {
+        elevations.push(Math.round(elevationObj.elevation));
+    });
+
+    var max = Math.max(...elevations);
+    var min = Math.min(...elevations);
+    var lowElevMax = Math.round((max - min) / 3);
+    var midElevMax = Math.round(lowElevMax * 2);
+    return [min, lowElevMax, midElevMax, max];
+}
+
