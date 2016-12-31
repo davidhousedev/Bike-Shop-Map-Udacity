@@ -17,6 +17,8 @@ var ListMarker = function(data) {
     this.elevation = ko.observable(data.elevation || null);
     this.placeID = ko.observable(data.placeID || null);
     this.address = ko.observable(data.address || null);
+    this.rating = ko.observable(data.rating || null);
+    this.openNow = ko.observable(data.openNow || null);
 };
 
 var ViewModel = function() {
@@ -27,12 +29,32 @@ var ViewModel = function() {
         self.markerData.removeAll();
     };
 
-/*    self.addListItem = function(googlePlace) {
-        itemData = {
+    self.addGoogleListItem = function(googlePlace) {
+        console.log(googlePlace);
+        var itemData = {
             name: googlePlace.name,
+            placeID: googlePlace.place_id,
+            rating: googlePlace.rating,
+            address: googlePlace.vicinity,
+        };
 
+        if (googlePlace.opening_hours) {
+            itemData.openNow = googlePlace.opening_hours.open_now;
         }
-    };*/
+
+        self.markerData.push(new ListMarker(itemData));
+    };
+
+    // Updates knockoutJS list items with elevation rating from Google API call
+    self.addGoogleElevation = function(placeID, elevationRating) {
+        for (var i = 0; i < self.markerData().length; i++) {
+            var place = self.markerData()[i];
+            if (place.placeID() == placeID) {
+                place.elevation(elevationRating);
+                break;
+            }
+        }
+    };
 };
 
 
@@ -79,7 +101,7 @@ function getPlaceIDs() {
         clearMap();
         data.forEach(function(place){
             createMarker(place);
-            viewModel.markerData.push(place.place_id);
+            viewModel.addGoogleListItem(place);
         });
 
         updateMarkersElevation();
@@ -105,6 +127,7 @@ function createMarker(place) {
         title: place.name,
         icon: markerIcon('black', 'black')
     });
+    marker.placeID = place.place_id;
     mapMarkers.push(marker);
     console.log(marker);
     marker.setMap(map);
@@ -127,17 +150,24 @@ function updateMarkersElevation() {
             for (var i = 0; i < results.length; i++) {
                 var elevLatLng = results[i].location.toUrlValue(5);
                 var markerLatLng = mapMarkers[i].getPosition().toUrlValue(5);
-                console.log(markerLatLng, elevLatLng);
+                console.log('elev map marker:')
+                console.log(mapMarkers[i]);
                 if (elevLatLng == markerLatLng) {
                     if (results[i].elevation < elevationRanges[1]) {
                         changeMapMarkerColor(mapMarkers[i], 'green');
-                        mapMarkers[i]['elevation'] = 'low';
+                        mapMarkers[i].elevation = 'low';
+                        viewModel.addGoogleElevation(mapMarkers[i].placeID,
+                                                     'low');
                     } else if (results[i].elevation < elevationRanges[2]) {
                         changeMapMarkerColor(mapMarkers[i], 'yellow');
-                        mapMarkers[i]['elevation'] = 'med';
+                        mapMarkers[i].elevation = 'med';
+                        viewModel.addGoogleElevation(mapMarkers[i].placeID,
+                                                     'med');
                     } else {
                         changeMapMarkerColor(mapMarkers[i], 'red');
-                        mapMarkers[i]['elevation'] = 'high';
+                        mapMarkers[i].elevation = 'high';
+                        viewModel.addGoogleElevation(mapMarkers[i].placeID,
+                                                     'high');
                     }
                 }
 
@@ -147,7 +177,7 @@ function updateMarkersElevation() {
             $elevationLegend.find('#elevMin').text(elevationRanges[0]);
             $elevationLegend.css('display', 'block');
         }
-    })
+    });
 }
 
 

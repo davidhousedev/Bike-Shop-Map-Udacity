@@ -25,11 +25,17 @@
 <body>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-xs-12 col-sm-4">
+            <div class="col-xs-12 col-sm-4 item-list">
                 <div data-bind="foreach: markerData">
-                    <div data-bind="text: $data"></div>
-                    <!-- <div data-bind="text: placeID"></div> -->
+                    <h3 data-bind="text: name"></h3>
+                    <p>elevation: <span data-bind="text: elevation"></span></p>
+                    <p>placeID: <span data-bind="text: placeID"></span></p>
+                    <p>address: <span data-bind="text: address"></span></p>
+                    <p>rating: <span data-bind="text: rating"></span></p>
+                    <p>openNow: <span data-bind="text: openNow"></span></p>
+
                 </div>
+
                 <div id="elevLegend"><h3 id="elevMax"></h3><h3 id="elevMin"></h3></div>
             </div>
             <div class="col-xs-12 col-sm-8 map">
