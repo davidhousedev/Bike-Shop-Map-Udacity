@@ -2,6 +2,31 @@
 
 var map;
 var placeService;
+var mapMarkers = [];
+
+var ListMarker = function(data) {
+    this.lat = ko.observable(data.lat || null);
+    this.lon = ko.observable(data.lon || null);
+    this.name = ko.observable(data.name || null);
+    this.elevation = ko.observable(data.elevation || null);
+    this.placeID = ko.observable(data.placeID || null);
+    this.address = ko.observable(data.address || null);
+};
+
+var ViewModel = function() {
+    var self = this;
+    self.markerData = ko.observableArray([]);
+
+    self.clearList = function() {
+        self.markerData.removeAll();
+    }
+};
+
+
+var viewModel = new ViewModel();
+ko.applyBindings(viewModel);
+
+
 
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
@@ -22,62 +47,39 @@ function initMap() {
 }
 
 function getPlaceIDs() {
-    console.log(map.getBounds());
     var request = {
         bounds: map.getBounds(),
         type: 'bicycle_store',
     };
 
     var callback = function(data) {
-        console.log(data);
+        viewModel.clearList();
+        clearMapMarkers();
+        data.forEach(function(place){
+            createMarker(place);
+            viewModel.markerData.push(place.place_id);
+        });
     };
 
     placeService.nearbySearch(request, callback);
 }
 
+function createMarker(place) {
+    var placeLat = place.geometry.location.lat();
+    var placeLng = place.geometry.location.lng();
+    var placeLatLng = new google.maps.LatLng(placeLat, placeLng);
+    var marker = new google.maps.Marker({
+        position: placeLatLng,
+        title: place.name
+    });
+    mapMarkers.push(marker);
+    console.log(place);
+    marker.setMap(map);
+}
 
-$(function(){
-
-
-    var ListMarker = function(data) {
-        this.lat = ko.observable(data.lat || null);
-        this.lon = ko.observable(data.lon || null);
-        this.name = ko.observable(data.name || null);
-        this.elevation = ko.observable(data.elevation || null);
-        this.placeID = ko.observable(data.placeID || null);
-        this.address = ko.observable(data.address || null);
-    };
-
-    var ViewModel = function(markers) {
-        var self = this;
-        self.markerData = ko.observableArray(markers.map(function (marker) {
-            return new ListMarker(marker);
-        }));
-
-        console.log(self.markerData())
-        /*// Creates a marker in the list and the map
-        self.makeMarker = function(){
-
-        };*/
-    };
-
-    var markers = [
-        {
-            name: 'Wheelie wheels',
-            placeID: 'abc123'
-        },
-        {
-            name: 'Bikie bike',
-            placeID: 'abc456'
-        },
-        {
-            name: 'Wompy womp',
-            placeID: 'abc987'
-        }
-    ];
-
-
-    var viewModel = new ViewModel(markers || []);
-    ko.applyBindings(viewModel);
-
-});
+function clearMapMarkers() {
+    mapMarkers.forEach(function(marker){
+        marker.setMap(null)
+    });
+    mapMarkers = [];
+}
