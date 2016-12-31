@@ -4,9 +4,13 @@ var map;
 var placeService;
 var mapMarkers = [];
 
+/**
+ * KnockoutJS dynamic list handling
+ */
+
 var ListMarker = function(data) {
-    this.lat = ko.observable(data.lat || null);
-    this.lon = ko.observable(data.lon || null);
+    /*this.lat = ko.observable(data.lat || null);
+    this.lon = ko.observable(data.lon || null);*/
     this.name = ko.observable(data.name || null);
     this.elevation = ko.observable(data.elevation || null);
     this.placeID = ko.observable(data.placeID || null);
@@ -19,7 +23,14 @@ var ViewModel = function() {
 
     self.clearList = function() {
         self.markerData.removeAll();
-    }
+    };
+
+/*    self.addListItem = function(googlePlace) {
+        itemData = {
+            name: googlePlace.name,
+
+        }
+    };*/
 };
 
 
@@ -27,6 +38,9 @@ var viewModel = new ViewModel();
 ko.applyBindings(viewModel);
 
 
+/**
+ * Google Map API and Marker handling
+ */
 
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
@@ -70,8 +84,10 @@ function createMarker(place) {
 
     // Image sourced from Wikipedia
     var image = {
-        url: 'imgs/Bicycle.svg',
-        scaledSize: new google.maps.Size(48, 28)
+        path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+        //scaledSize: new google.maps.Size(48, 28),
+        scale: 4,
+        strokeColor: 'black'
     }
 
     var placeLatLng = new google.maps.LatLng(placeLat, placeLng);
@@ -81,7 +97,7 @@ function createMarker(place) {
         icon: image
     });
     mapMarkers.push(marker);
-    console.log(place);
+    console.log(marker);
     marker.setMap(map);
 }
 
