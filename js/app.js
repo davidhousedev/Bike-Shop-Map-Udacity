@@ -67,10 +67,18 @@ function getPlaceIDs() {
 function createMarker(place) {
     var placeLat = place.geometry.location.lat();
     var placeLng = place.geometry.location.lng();
+
+    // Image sourced from Wikipedia
+    var image = {
+        url: 'imgs/Bicycle.svg',
+        scaledSize: new google.maps.Size(48, 28)
+    }
+
     var placeLatLng = new google.maps.LatLng(placeLat, placeLng);
     var marker = new google.maps.Marker({
         position: placeLatLng,
-        title: place.name
+        title: place.name,
+        icon: image
     });
     mapMarkers.push(marker);
     console.log(place);
