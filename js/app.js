@@ -3,6 +3,7 @@
 var map;
 var placeService;
 var elevationService;
+var infoWindow;
 var mapMarkers = [];
 
 
@@ -129,7 +130,9 @@ function createMarker(place) {
     });
     marker.placeID = place.place_id;
     mapMarkers.push(marker);
-    console.log(marker);
+    marker.addListener('click', function() {
+        openInfoWindow(place.place_id)
+    });
     marker.setMap(map);
 }
 
@@ -180,7 +183,30 @@ function updateMarkersElevation() {
     });
 }
 
+/**
+ * Info Window operations
+ */
 
+ function openInfoWindow(placeID) {
+    if (infoWindow) {
+        infoWindow.close();
+    }
+    for (var i = 0; i < mapMarkers.length; i++) {
+        if (placeID == mapMarkers[i].placeID) {
+            var marker = mapMarkers[i];
+            infoWindow = new google.maps.InfoWindow({
+                content: 'hello, world',
+            });
+            infoWindow.open(map, marker)
+        }
+    }
+ }
+
+
+
+/**
+ * Map marker operations
+ */
 
 function changeMapMarkerColor(marker, color){
     marker.setIcon(markerIcon(color, color));
@@ -199,10 +225,16 @@ function markerIcon(strokeColor, fillColor){
 
 function clearMap() {
     // Hide and dereference any current map markers
+    var mapBounds = map.getBounds();
     mapMarkers.forEach(function(marker){
-        marker.setMap(null)
+        if (!mapBounds.contains(marker.getPosition())) {
+            marker.setMap(null);
+            var markerIndex
+            mapMarkers.splice(mapMarkers.indexOf(marker), 1);
+            console.log(mapMarkers);
+        }
     });
-    mapMarkers = [];
+    //mapMarkers = [];
 }
 
 /*
