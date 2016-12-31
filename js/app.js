@@ -1,11 +1,12 @@
 'use strict';
 
 var map;
+var placeService;
 
 function initMap() {
     map = new google.maps.Map(document.getElementById('map'), {
-        center: {lat: -33.867, lng: 151.206},
-        zoom: 10,
+        center: {lat: 47.606, lng: -122.332},
+        zoom: 13,
         stylers: [{
             stylers: [{visibility: 'simplified'}]
         }, {
@@ -13,6 +14,25 @@ function initMap() {
             stylers: [{visibility: 'off'}]
         }]
     });
+
+    placeService = new google.maps.places.PlacesService(map);
+
+    // Search for bike shops once map idle
+    map.addListener('idle', getPlaceIDs);
+}
+
+function getPlaceIDs() {
+    console.log(map.getBounds());
+    var request = {
+        bounds: map.getBounds(),
+        type: 'bicycle_store',
+    };
+
+    var callback = function(data) {
+        console.log(data);
+    };
+
+    placeService.nearbySearch(request, callback);
 }
 
 
@@ -55,6 +75,7 @@ $(function(){
             placeID: 'abc987'
         }
     ];
+
 
     var viewModel = new ViewModel(markers || []);
     ko.applyBindings(viewModel);
