@@ -2,7 +2,9 @@
 
 var map;
 var placeService;
+/*var elevationService;*/
 var mapMarkers = [];
+
 
 /**
  * KnockoutJS dynamic list handling
@@ -55,6 +57,7 @@ function initMap() {
     });
 
     placeService = new google.maps.places.PlacesService(map);
+    /*elevationService = new google.maps.ElevationService;*/
 
     // Search for bike shops once map idle
     map.addListener('idle', getPlaceIDs);
@@ -85,20 +88,37 @@ function createMarker(place) {
     // Image sourced from Wikipedia
     var image = {
         path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
-        //scaledSize: new google.maps.Size(48, 28),
         scale: 4,
         strokeColor: 'black'
-    }
+    };
 
     var placeLatLng = new google.maps.LatLng(placeLat, placeLng);
     var marker = new google.maps.Marker({
         position: placeLatLng,
         title: place.name,
-        icon: image
+        icon: markerIcon('black', 'black')
     });
     mapMarkers.push(marker);
     console.log(marker);
     marker.setMap(map);
+}
+
+function changeMapMarkerColor(color){
+    mapMarkers.forEach(function(marker){
+        marker.icon.strokeColor = color;
+        marker.setMap(map);
+    });
+}
+
+function markerIcon(strokeColor, fillColor){
+    return {
+        path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
+        scale: 4,
+        strokeColor: strokeColor,
+        strokeWeight: 1,
+        fillColor: fillColor,
+        fillOpacity: 0.5
+    };
 }
 
 function clearMapMarkers() {
