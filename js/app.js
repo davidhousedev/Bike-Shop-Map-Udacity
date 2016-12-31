@@ -16,7 +16,7 @@ var ListMarker = function(data) {
     this.lon = ko.observable(data.lon || null);*/
     this.name = ko.observable(data.name || null);
     this.elevation = ko.observable(data.elevation || null);
-    this.placeID = ko.observable(data.placeID || null);
+    this.placeId = ko.observable(data.placeId || null);
     this.address = ko.observable(data.address || null);
     this.rating = ko.observable(data.rating || null);
     this.openNow = ko.observable(data.openNow || null);
@@ -31,10 +31,10 @@ var ViewModel = function() {
     };
 
     self.addGoogleListItem = function(googlePlace) {
-        console.log(googlePlace);
+        //console.log(googlePlace);
         var itemData = {
             name: googlePlace.name,
-            placeID: googlePlace.place_id,
+            placeId: googlePlace.place_id,
             rating: googlePlace.rating,
             address: googlePlace.vicinity,
         };
@@ -46,18 +46,18 @@ var ViewModel = function() {
         self.markerData.push(new ListMarker(itemData));
     };
 
-    // Remove all list items corresponding to an array of placeIDs
-    self.removeGoogleListItems = function(placeIDs) {
+    // Remove all list items corresponding to an array of placeIds
+    self.removeGoogleListItems = function(placeIds) {
         self.markerData.remove(function(listItem) {
-            return placeIDs.includes(listItem.placeID());
+            return placeIds.includes(listItem.placeId());
         });
     };
 
     // Updates knockoutJS list items with elevation rating from Google API call
-    self.addGoogleElevation = function(placeID, elevationRating) {
+    self.addGoogleElevation = function(placeId, elevationRating) {
         for (var i = 0; i < self.markerData().length; i++) {
             var place = self.markerData()[i];
-            if (place.placeID() == placeID) {
+            if (place.placeId() == placeId) {
                 place.elevation(elevationRating);
                 break;
             }
@@ -95,10 +95,10 @@ function initMap() {
     map.controls[google.maps.ControlPosition.LEFT_TOP].push(elevLegend)
 
     // Search for bike shops once map idle
-    map.addListener('idle', getPlaceIDs);
+    map.addListener('idle', getPlaceIds);
 }
 
-function getPlaceIDs() {
+function getPlaceIds() {
     var request = {
         bounds: map.getBounds(),
         type: 'bicycle_store',
@@ -111,7 +111,7 @@ function getPlaceIDs() {
         // to prevent duplicate markers from being placed
         mapMarkers.forEach(function(marker){
             for (var i = 0; i < data.length; i++) {
-                if (marker.placeID == data[i].place_id) {
+                if (marker.placeId == data[i].place_id) {
                     data.splice(i, 1);
                     break;
                 }
@@ -146,7 +146,7 @@ function createMarker(place) {
         title: place.name,
         icon: markerIcon('black', 'black')
     });
-    marker.placeID = place.place_id;
+    marker.placeId = place.place_id;
     mapMarkers.push(marker);
     marker.addListener('click', function() {
         openInfoWindow(place.place_id)
@@ -171,23 +171,23 @@ function updateMarkersElevation() {
             for (var i = 0; i < results.length; i++) {
                 var elevLatLng = results[i].location.toUrlValue(5);
                 var markerLatLng = mapMarkers[i].getPosition().toUrlValue(5);
-                console.log('elev map marker:')
-                console.log(mapMarkers[i]);
+                //console.log('elev map marker:')
+                //console.log(mapMarkers[i]);
                 if (elevLatLng == markerLatLng) {
                     if (results[i].elevation < elevationRanges[1]) {
                         changeMapMarkerColor(mapMarkers[i], 'green');
                         mapMarkers[i].elevation = 'low';
-                        viewModel.addGoogleElevation(mapMarkers[i].placeID,
+                        viewModel.addGoogleElevation(mapMarkers[i].placeId,
                                                      'low');
                     } else if (results[i].elevation < elevationRanges[2]) {
                         changeMapMarkerColor(mapMarkers[i], 'yellow');
                         mapMarkers[i].elevation = 'med';
-                        viewModel.addGoogleElevation(mapMarkers[i].placeID,
+                        viewModel.addGoogleElevation(mapMarkers[i].placeId,
                                                      'med');
                     } else {
                         changeMapMarkerColor(mapMarkers[i], 'red');
                         mapMarkers[i].elevation = 'high';
-                        viewModel.addGoogleElevation(mapMarkers[i].placeID,
+                        viewModel.addGoogleElevation(mapMarkers[i].placeId,
                                                      'high');
                     }
                 }
@@ -205,12 +205,12 @@ function updateMarkersElevation() {
  * Info Window operations
  */
 
- function openInfoWindow(placeID) {
+ function openInfoWindow(placeId) {
     if (infoWindow) {
         infoWindow.close();
     }
     for (var i = 0; i < mapMarkers.length; i++) {
-        if (placeID == mapMarkers[i].placeID) {
+        if (placeId == mapMarkers[i].placeId) {
             var marker = mapMarkers[i];
             infoWindow = new google.maps.InfoWindow({
                 content: 'hello, world',
@@ -248,11 +248,11 @@ function clearMap() {
     // Hide and dereference markers outside of current map view
     mapMarkers.forEach(function(marker){
         if (!mapBounds.contains(marker.getPosition())) {
-            clearListIds.push(marker.placeID);
+            clearListIds.push(marker.placeId);
             marker.setMap(null);
             var markerIndex;
             mapMarkers.splice(mapMarkers.indexOf(marker), 1);
-            console.log(mapMarkers);
+            //console.log(mapMarkers);
         }
     });
 
