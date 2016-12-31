@@ -46,6 +46,13 @@ var ViewModel = function() {
         self.markerData.push(new ListMarker(itemData));
     };
 
+    // Remove all list items corresponding to an array of placeIDs
+    self.removeGoogleListItems = function(placeIDs) {
+        self.markerData.remove(function(listItem) {
+            return placeIDs.includes(listItem.placeID());
+        });
+    };
+
     // Updates knockoutJS list items with elevation rating from Google API call
     self.addGoogleElevation = function(placeID, elevationRating) {
         for (var i = 0; i < self.markerData().length; i++) {
@@ -98,8 +105,19 @@ function getPlaceIDs() {
     };
 
     var callback = function(data) {
-        viewModel.clearList();
         clearMap();
+
+        // Remove places that are still visible from api results
+        // to prevent duplicate markers from being placed
+        mapMarkers.forEach(function(marker){
+            for (var i = 0; i < data.length; i++) {
+                if (marker.placeID == data[i].place_id) {
+                    data.splice(i, 1);
+                    break;
+                }
+            }
+        });
+
         data.forEach(function(place){
             createMarker(place);
             viewModel.addGoogleListItem(place);
@@ -224,16 +242,23 @@ function markerIcon(strokeColor, fillColor){
 }
 
 function clearMap() {
-    // Hide and dereference any current map markers
     var mapBounds = map.getBounds();
+    var clearListIds = [];
+
+    // Hide and dereference markers outside of current map view
     mapMarkers.forEach(function(marker){
         if (!mapBounds.contains(marker.getPosition())) {
+            clearListIds.push(marker.placeID);
             marker.setMap(null);
-            var markerIndex
+            var markerIndex;
             mapMarkers.splice(mapMarkers.indexOf(marker), 1);
             console.log(mapMarkers);
         }
     });
+
+    // Remove any hidden locations from list view
+    viewModel.removeGoogleListItems(clearListIds);
+
     //mapMarkers = [];
 }
 
