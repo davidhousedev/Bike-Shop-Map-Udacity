@@ -193,6 +193,14 @@ viewModel.populateNews();
  */
 
 function initMap() {
+
+    setTimeout(function(){
+        if (!placeService) {
+            console.log('Error: Google Maps could not be loaded. ' +
+                  'Please try again later.');
+        }
+    }, 100);
+
     map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 47.606, lng: -122.332},
         zoom: 13,
