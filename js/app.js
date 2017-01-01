@@ -4,6 +4,7 @@ var map;
 var placeService;
 var elevationService;
 var infoWindow;
+var infoWindowContent;
 var mapMarkers = [];
 
 
@@ -129,6 +130,111 @@ function getPlaceIds() {
     placeService.nearbySearch(request, callback);
 }
 
+
+/**
+ * Info Window operations
+ */
+
+function openInfoWindow(placeId) {
+    if (infoWindow) {
+        infoWindow.close();
+    }
+    for (var i = 0; i < mapMarkers.length; i++) {
+        if (placeId == mapMarkers[i].placeId) {
+            var marker = mapMarkers[i];
+
+            infoWindowContent = document.createElement('div');
+            infoWindowContent.setAttribute('id', 'info-content');
+            var $title = $(document.createElement('strong'));
+            $title.text(mapMarkers[i].name);
+            var $addr = $(document.createElement('div'));
+            $addr.text(mapMarkers[i].address);
+            infoWindowContent.appendChild($title[0]);
+            //infoWindowContent.appendChild(document.createElement('br'))
+            infoWindowContent.appendChild($addr[0]);
+
+            /*var contentDiv = document.getElementById('info-content');*/
+            infoWindow = new google.maps.InfoWindow({
+                content: infoWindowContent,
+            });
+            infoWindow.open(map, marker);
+
+            //infoWindow.setContent('hello, David');
+            getGooglePlaceDetails(placeId);
+        }
+    }
+}
+
+function updateInfoWindow(content) {
+    console.log(content);
+    //var infoContent = document.getElementById('info-content');
+    //var $infoContent = $(document.createElement('div'));
+
+    if (content.source === 'google') {
+        var $googleDiv = $(document.createElement('div'));
+        var $hours = $(document.createElement('div'));
+        $hours.text(content.hours);
+        $googleDiv.append($hours);
+
+        var $phone = $(document.createElement('div'));
+        $phone.text(content.phone);
+        $googleDiv.append($phone)
+
+        if (content.rating) {
+            var $rating = $(document.createElement('div'));
+            $rating.text('Google Rating: ' + content.rating + '/5');
+        }
+        $googleDiv.append($rating);
+
+        if (content.website) {
+            var $websiteWrapper = $(document.createElement('div'));
+            var $websiteLink = $(document.createElement('a'));
+            $websiteLink.attr('href', content.website);
+            $websiteLink.attr('target', '_blank');
+            $websiteLink.text('website');
+            $websiteWrapper.append($websiteLink);
+            $googleDiv.append($websiteWrapper);
+        }
+
+        // Write new info to map
+        infoWindowContent.appendChild($googleDiv[0]);
+    }
+
+    infoWindow.setContent(infoWindowContent);
+}
+
+function getGooglePlaceDetails(placeId) {
+    placeService.getDetails({
+        placeId: placeId
+    }, function(place, status) {
+        if (status === google.maps.places.PlacesServiceStatus.OK) {
+            console.log(place);
+            var dateIndex = getDayOfWeekNum();
+            var content = {
+                source: 'google',
+                status: 'OK',
+                name: place.name,
+                address: place.vicinity,
+            };
+            console.log('date index is: ' + dateIndex);
+            // For data that may not be present, check before storing
+            content.rating = place.rating ? place.rating : null;
+            content.phone = place.formatted_phone_number ?
+                place.formatted_phone_number : null;
+            content.hours = place.opening_hours ?
+                place.opening_hours.weekday_text[dateIndex] : null;
+            content.website = place.website ? place.website : null;
+
+            updateInfoWindow(content);
+        }
+    });
+}
+
+
+/**
+ * Map marker operations
+ */
+
 function createMarker(place) {
     var placeLat = place.geometry.location.lat();
     var placeLng = place.geometry.location.lng();
@@ -146,7 +252,12 @@ function createMarker(place) {
         title: place.name,
         icon: markerIcon('black', 'black')
     });
+
+    // Populate marker with info from place query
     marker.placeId = place.place_id;
+    marker.name = place.name;
+    marker.address = place.vicinity;
+
     mapMarkers.push(marker);
     marker.addListener('click', function() {
         openInfoWindow(place.place_id)
@@ -201,31 +312,6 @@ function updateMarkersElevation() {
     });
 }
 
-/**
- * Info Window operations
- */
-
- function openInfoWindow(placeId) {
-    if (infoWindow) {
-        infoWindow.close();
-    }
-    for (var i = 0; i < mapMarkers.length; i++) {
-        if (placeId == mapMarkers[i].placeId) {
-            var marker = mapMarkers[i];
-            infoWindow = new google.maps.InfoWindow({
-                content: 'hello, world',
-            });
-            infoWindow.open(map, marker)
-        }
-    }
- }
-
-
-
-/**
- * Map marker operations
- */
-
 function changeMapMarkerColor(marker, color){
     marker.setIcon(markerIcon(color, color));
 }
@@ -263,7 +349,7 @@ function clearMap() {
 }
 
 /*
- * Math helper
+ * Helpers
  */
 
 function getElevationRange(elevationObjs) {
@@ -279,3 +365,9 @@ function getElevationRange(elevationObjs) {
     return [min, lowElevMax, midElevMax, max];
 }
 
+// Returns the number of the day of the week
+// zero-indexed, starting on Monday
+function getDayOfWeekNum() {
+    var dateToday = new Date(Date.now());
+    return parseInt(dateToday.getDay() - 1);
+}
