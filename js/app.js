@@ -97,6 +97,10 @@ var ViewModel = function() {
         return currentList;
     }, this);
 
+    self.zoomToMarker = function(listItem) {
+        openInfoWindow(listItem.placeId())
+    };
+
     self.addGoogleListItem = function(googlePlace) {
         console.log('value of openNow is: ' + self.openNow());
         //console.log(googlePlace);
