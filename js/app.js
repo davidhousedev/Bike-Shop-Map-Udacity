@@ -199,7 +199,6 @@ function openInfoWindow(placeId) {
 
             //infoWindow.setContent('hello, David');
             getGooglePlaceDetails(placeId);
-            getYelpPlaceDetails(mapMarkers[i].name);
         }
     }
 }
@@ -332,11 +331,13 @@ function updateMarkersElevation() {
                         mapMarkers[i].elevation = 'med';
                         viewModel.addGoogleElevation(mapMarkers[i].placeId,
                                                      'med');
+
                     } else {
                         changeMapMarkerColor(mapMarkers[i], 'red');
                         mapMarkers[i].elevation = 'high';
                         viewModel.addGoogleElevation(mapMarkers[i].placeId,
                                                      'high');
+
                     }
                 }
 
@@ -394,11 +395,12 @@ function getElevationRange(elevationObjs) {
     elevationObjs.forEach(function(elevationObj) {
         elevations.push(Math.round(elevationObj.elevation));
     });
-
+    console.log(elevations);
     var max = Math.max(...elevations);
     var min = Math.min(...elevations);
-    var lowElevMax = Math.round((max - min) / 3);
-    var midElevMax = Math.round(lowElevMax * 2);
+    var increment = Math.round((max - min) / 3)
+    var lowElevMax = increment + min;
+    var midElevMax = (increment * 2) + min;
     return [min, lowElevMax, midElevMax, max];
 }
 
