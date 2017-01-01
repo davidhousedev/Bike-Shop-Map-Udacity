@@ -43,6 +43,7 @@ var ViewModel = function() {
 
     self.filteredList = ko.computed(function() {
         var currentList = self.markerData();
+
         if (self.openNow()) {
             currentList = currentList.filter(function(item) {
                 return item.openNow() === true;
@@ -59,8 +60,42 @@ var ViewModel = function() {
             });
         }
 
+        if (self.searchText()) {
+
+            // Serialize list for searching
+            var fuseSearchArry = []
+            currentList.forEach(function(item){
+                var obj = {
+                    name: item.name(),
+                    address: item.address()
+                }
+                fuseSearchArry.push(obj);
+            });
+
+            // Configure options for FuseJS search
+            var searchOptions = {
+                shouldSort: true,
+                tokenize: true,
+                findAllMatches: true,
+                threshold: 0.3,
+                location: 0,
+                distance: 100,
+                maxPatternLength: 32,
+                minMatchCharLength: 1,
+                keys: [
+                    "name",
+                    "address"
+                ]
+            };
+            console.log(self.searchText());
+            var fuse = new Fuse(fuseSearchArry, searchOptions);
+            var result = fuse.search(self.searchText());
+            return result;
+            console.log(result);
+        }
+
         return currentList;
-    });
+    }, this);
 
     self.addGoogleListItem = function(googlePlace) {
         console.log('value of openNow is: ' + self.openNow());
