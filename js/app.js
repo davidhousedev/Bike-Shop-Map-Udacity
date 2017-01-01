@@ -97,8 +97,8 @@ var ViewModel = function() {
         return currentList;
     }, this);
 
-    self.zoomToMarker = function(listItem) {
-        openInfoWindow(listItem.placeId())
+    self.openMapInfoWindow = function(listItem) {
+        openInfoWindow(listItem.placeId());
     };
 
     self.addGoogleListItem = function(googlePlace) {
@@ -261,6 +261,7 @@ function openInfoWindow(placeId) {
                 content: infoWindowContent,
             });
             infoWindow.open(map, marker);
+            bounceMarker(marker);
 
             //infoWindow.setContent('hello, David');
             getGooglePlaceDetails(placeId);
@@ -413,6 +414,13 @@ function updateMarkersElevation() {
             $elevationLegend.css('display', 'block');
         }
     });
+}
+
+function bounceMarker(marker) {
+    marker.setAnimation(google.maps.Animation.BOUNCE);
+    window.setTimeout(function(){
+        marker.setAnimation(null);
+    }, 700);
 }
 
 function changeMapMarkerColor(marker, color){
