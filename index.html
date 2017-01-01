@@ -21,7 +21,6 @@
     <link rel="stylesheet" href="css/styles.css">
 
     <title>Seattle Bike Shops</title>
-<!-- data-bind="css: { 'active': openNow === true }" -->
 </head>
 <body>
     <div id="elevLegend"><h3 id="elevMax"></h3><h3 id="elevMin"></h3></div>
@@ -48,11 +47,8 @@
             </div>
             <span class="navbar-text">Min. Rating: </span>
             <div class="btn-group">
-                <label for="rating1" data-bind="css: { 'active': ratingMin() === 1 }" class="btn btn-outline-secondary btn-sm">
-                    <input data-bind="checked: ratingMin, checkedValue: 1" id="rating1" type="radio" autocomplete="off">1
-                </label>
-                <label for="rating2" data-bind="css: { 'active': ratingMin() === 2 }" class="btn btn-outline-secondary btn-sm">
-                    <input data-bind="checked: ratingMin, checkedValue: 2" id="rating2" type="radio" autocomplete="off">2
+                <label for="rating-none" data-bind="css: { 'active': ratingMin() === false }" class="btn btn-outline-secondary btn-sm">
+                    <input data-bind="checked: ratingMin, checkedValue: false" id="rating-none" type="radio" autocomplete="off">None
                 </label>
                 <label for="rating3" data-bind="css: { 'active': ratingMin() === 3 }" class="btn btn-outline-secondary btn-sm">
                     <input data-bind="checked: ratingMin, checkedValue: 3" id="rating3" type="radio" autocomplete="off">3
@@ -63,7 +59,6 @@
                 <label for="rating5" data-bind="css: { 'active': ratingMin() === 5 }" class="btn btn-outline-secondary btn-sm">
                     <input data-bind="checked: ratingMin, checkedValue: 5" id="rating5" type="radio" autocomplete="off">5
                 </label>
-            <button data-bind="click: logObs">Debug: Log observables</button>
             </div>
              <input data-bind="value: searchText" type="text" class="form-control" placeholder="search">
         </div>
@@ -72,13 +67,8 @@
                 <div id="map"></div>
             </div>
             <div class="col-xs-6 col-md-3 pull-md-6 item-list">
-                <div data-bind="foreach: markerData">
-                    <h3 data-bind="text: name"></h3>
-                    <div>elevation: <span data-bind="text: elevation"></span></div>
-                    <div>placeID: <span data-bind="text: placeId"></span></div>
-                    <div>address: <span data-bind="text: address"></span></div>
-                    <div>rating: <span data-bind="text: rating"></span></div>
-                    <div>openNow: <span data-bind="text: openNow"></span></div>
+                <div data-bind="foreach: filteredList">
+                    <h6 data-bind="text: name"></h6>
                 </div>
             </div>
             <div class="col-xs-6 col-md-3 news">

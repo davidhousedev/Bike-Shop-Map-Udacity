@@ -31,22 +31,36 @@ var NewsItem = function(data) {
 
 var ViewModel = function() {
     var self = this;
+    // Observables for item lists
     self.markerData = ko.observableArray([]);
     self.newsItems = ko.observableArray([]);
 
     // Observables for search filters
     self.openNow = ko.observable(false);
     self.elevations = ko.observableArray(['low', 'med', 'high']);
-    self.ratingMin = ko.observable(1);
+    self.ratingMin = ko.observable(false);
     self.searchText = ko.observable('');
 
-    self.filterResults = function() {
-        console.log(self.openNow(), self.elevations(), self.ratingMin(), self.searchText());
-    };
+    self.filteredList = ko.computed(function() {
+        var currentList = self.markerData();
+        if (self.openNow()) {
+            currentList = currentList.filter(function(item) {
+                return item.openNow() === true;
+            });
+        }
 
-    self.clearList = function() {
-        self.markerData.removeAll();
-    };
+        currentList = currentList.filter(function(item) {
+            return self.elevations().includes(item.elevation());
+        });
+
+        if (self.ratingMin()) {
+            currentList = currentList.filter(function(item){
+                return item.rating() >= self.ratingMin();
+            });
+        }
+
+        return currentList;
+    });
 
     self.addGoogleListItem = function(googlePlace) {
         console.log('value of openNow is: ' + self.openNow());
