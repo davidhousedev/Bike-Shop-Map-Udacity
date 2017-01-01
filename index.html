@@ -7,6 +7,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <!-- Load dependencies -->
+    <script src="bower_components/oauth-signature/dist/oauth-signature.min.js"></script>
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/tether/dist/js/tether.min.js"></script>
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
@@ -23,25 +24,32 @@
 
 </head>
 <body>
+    <div id="elevLegend"><h3 id="elevMax"></h3><h3 id="elevMin"></h3></div>
     <div class="container-fluid">
         <div class="row">
-            <div class="col-xs-12 col-sm-4 item-list">
-                <div id="info-content"></div>
-                <div data-bind="foreach: markerData">
-                    <h3 data-bind="text: name"></h3>
-                    <p>elevation: <span data-bind="text: elevation"></span></p>
-                    <p>placeID: <span data-bind="text: placeId"></span></p>
-                    <p>address: <span data-bind="text: address"></span></p>
-                    <p>rating: <span data-bind="text: rating"></span></p>
-                    <p>openNow: <span data-bind="text: openNow"></span></p>
+            <div class="col-xs-12 col-md-3 item-list">
+                    <div data-bind="foreach: markerData">
+                        <h3 data-bind="text: name"></h3>
+                        <p>elevation: <span data-bind="text: elevation"></span></p>
+                        <p>placeID: <span data-bind="text: placeId"></span></p>
+                        <p>address: <span data-bind="text: address"></span></p>
+                        <p>rating: <span data-bind="text: rating"></span></p>
+                        <p>openNow: <span data-bind="text: openNow"></span></p>
+                    </div>
 
-                </div>
-
-                <div id="elevLegend"><h3 id="elevMax"></h3><h3 id="elevMin"></h3></div>
             </div>
-            <div class="col-xs-12 col-sm-8 map">
+            <div class="col-xs-12 col-md-6 map">
                 <div id="map"></div>
-
+            </div>
+            <div class="col-xs-12 col-md-3 news">
+                <h3>Bike News from NewYorkTimes</h3>
+                <div data-bind="foreach: newsItems">
+                    <a data-bind="attr: {href: url}" target="_blank">
+                        <h5 data-bind="text: title"></h5>
+                    </a>
+                    <small data-bind="text: snippet"></small>
+                    <small data-bind="text: published"></small>
+                </div>
             </div>
         </div>
     </div>

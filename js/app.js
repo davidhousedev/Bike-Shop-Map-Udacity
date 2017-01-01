@@ -7,7 +7,6 @@ var infoWindow;
 var infoWindowContent;
 var mapMarkers = [];
 
-
 /**
  * KnockoutJS dynamic list handling
  */
@@ -23,9 +22,17 @@ var ListMarker = function(data) {
     this.openNow = ko.observable(data.openNow || null);
 };
 
+var NewsItem = function(data) {
+    this.title = ko.observable(data.title);
+    this.snippet = ko.observable(data.snippet);
+    this.url = ko.observable(data.url);
+    this.published = ko.observable(data.published);
+};
+
 var ViewModel = function() {
     var self = this;
     self.markerData = ko.observableArray([]);
+    self.newsItems = ko.observableArray([]);
 
     self.clearList = function() {
         self.markerData.removeAll();
@@ -64,11 +71,42 @@ var ViewModel = function() {
             }
         }
     };
+
+    self.populateNews = function() {
+        var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
+        url += '?' + $.param({
+            'api-key': "d553ebd4180c476d9b4a0faee6f69641",
+          'q': "seattle bicycle bike"
+        });
+        $.ajax({
+            url: url,
+            method: 'GET',
+        }).done(function(result) {
+            console.log(result);
+            result.response.docs.forEach(function(article){
+                // Display all articles that aren't local to NYC
+                if (article.section_name != 'N.Y. / Region'){
+                    var pubDate = new Date(article.pub_date);
+                    var data = {
+                        title: article.headline.main,
+                        snippet: article.snippet,
+                        url: article.web_url,
+                        published: pubDate.getFullYear()
+                    };
+
+                    self.newsItems.push(new NewsItem(data));
+                }
+            });
+        }).fail(function(err) {
+            $(".news").addClass('hidden-xs-up');
+        });
+    };
 };
 
 
 var viewModel = new ViewModel();
 ko.applyBindings(viewModel);
+viewModel.populateNews();
 
 
 /**
@@ -161,14 +199,13 @@ function openInfoWindow(placeId) {
 
             //infoWindow.setContent('hello, David');
             getGooglePlaceDetails(placeId);
+            getYelpPlaceDetails(mapMarkers[i].name);
         }
     }
 }
 
 function updateInfoWindow(content) {
     console.log(content);
-    //var infoContent = document.getElementById('info-content');
-    //var $infoContent = $(document.createElement('div'));
 
     if (content.source === 'google') {
         var $googleDiv = $(document.createElement('div'));
@@ -190,7 +227,7 @@ function updateInfoWindow(content) {
             var $websiteWrapper = $(document.createElement('div'));
             var $websiteLink = $(document.createElement('a'));
             $websiteLink.attr('href', content.website);
-            $websiteLink.attr('target', '_blank');
+            $websiteLink.attr('target', '_blank'); // Open link in new tab
             $websiteLink.text('website');
             $websiteWrapper.append($websiteLink);
             $googleDiv.append($websiteWrapper);
