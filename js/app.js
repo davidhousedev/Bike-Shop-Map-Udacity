@@ -29,11 +29,13 @@ var NewsItem = function(data) {
     this.published = ko.observable(data.published);
 };
 
+
 var ViewModel = function() {
     var self = this;
     // Observables for item lists
     self.markerData = ko.observableArray([]);
     self.newsItems = ko.observableArray([]);
+    self.newsError = ko.observable();
 
     // Observables for search filters
     self.openNow = ko.observable(false);
@@ -174,7 +176,7 @@ var ViewModel = function() {
                 }
             });
         }).fail(function(err) {
-            $(".news").addClass('hidden-xs-up');
+            self.newsError('Error: Could not retrieve articles from New York Times');
         });
     };
 
