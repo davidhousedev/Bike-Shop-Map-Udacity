@@ -67,7 +67,8 @@ var ViewModel = function() {
             currentList.forEach(function(item){
                 var obj = {
                     name: item.name(),
-                    address: item.address()
+                    address: item.address(),
+                    placeId: item.placeId()
                 }
                 fuseSearchArry.push(obj);
             });
@@ -87,12 +88,23 @@ var ViewModel = function() {
                     "address"
                 ]
             };
-            console.log(self.searchText());
+
             var fuse = new Fuse(fuseSearchArry, searchOptions);
             var result = fuse.search(self.searchText());
+            // hide map markers that are not present in list
+            var fusePlaceIds = result.map(function(item){
+                return item.placeId;
+            });
+            hideSpecifiedMarkers(fusePlaceIds);
+
             return result;
-            console.log(result);
         }
+
+        // hide map markers that are not present in list
+        var placeIds = currentList.map(function(item){
+            return item.placeId();
+        });
+        hideSpecifiedMarkers(placeIds);
 
         return currentList;
     }, this);
@@ -412,6 +424,17 @@ function updateMarkersElevation() {
             $elevationLegend.find('#elevMax').text(elevationRanges[3]);
             $elevationLegend.find('#elevMin').text(elevationRanges[0]);
             $elevationLegend.css('display', 'block');
+        }
+    });
+}
+
+function hideSpecifiedMarkers(placeIds) {
+    // Hide marker if its placeId is specified, else show it
+    mapMarkers.forEach(function(marker) {
+        if (!placeIds.includes(marker.placeId)) {
+            marker.setMap(null);
+        } else {
+            marker.setMap(map);
         }
     });
 }
