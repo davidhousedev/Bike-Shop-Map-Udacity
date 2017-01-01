@@ -1,5 +1,9 @@
-html, body, .container-fluid, .row, .map {
+html, body, .row, .map {
     height: 100%
+}
+
+.container-fluid {
+    height: 85%;
 }
 
 .item-list {
@@ -13,6 +17,7 @@ html, body, .container-fluid, .row, .map {
     overflow-y: scroll;
     overflow-x: hidden;
 }
+
 
 #map {
     width: 100%;
