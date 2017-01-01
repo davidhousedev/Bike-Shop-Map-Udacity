@@ -26,22 +26,56 @@
 <body>
     <div id="elevLegend"><h3 id="elevMax"></h3><h3 id="elevMin"></h3></div>
     <div class="container-fluid">
+        <div class="navbar navbar-light bg-faded">
+            <h3 class="navbar-brand">Seattle Bicycle Map</h3>
+            <form class="form-inline float-xs-right">
+                <button class="btn btn-sm btn-outline-secondary">Open Now</button>
+                <div class="btn-group" data-toggle="buttons">
+                    <label for="elev-low" class="btn btn-outline-success btn-sm">
+                        <input type="checkbox" id="elev-low" autocomplete="off">low
+                    </label>
+                    <label for="elev-med" class="btn btn-outline-warning btn-sm">
+                        <input type="checkbox" id="elev-med" autocomplete="off">med
+                    </label>
+                    <label for="elev-high" class="btn btn-outline-danger btn-sm">
+                        <input type="checkbox" id="elev-high" autocomplete="off">high
+                    </label>
+                </div>
+                <div class="btn-group" data-toggle="buttons">
+                    <label for="rating1" class="btn btn-outline-secondary btn-sm">
+                        <input id="rating1" type="radio" autocomplete="off">1
+                    </label>
+                    <label for="rating2" class="btn btn-outline-secondary btn-sm">
+                        <input id="rating2" type="radio" autocomplete="off">2
+                    </label>
+                    <label for="rating3" class="btn btn-outline-secondary btn-sm">
+                        <input id="rating3" type="radio" autocomplete="off">3
+                    </label>
+                    <label for="rating4" class="btn btn-outline-secondary btn-sm">
+                        <input id="rating4" type="radio" autocomplete="off">4
+                    </label>
+                    <label for="rating5" class="btn btn-outline-secondary btn-sm">
+                        <input id="rating5" type="radio" autocomplete="off">5
+                    </label>
+                </div>
+                <input type="text" class="form-control" placeholder="search">
+            </form>
+        </div>
         <div class="row">
-            <div class="col-xs-12 col-md-3 item-list">
-                    <div data-bind="foreach: markerData">
-                        <h3 data-bind="text: name"></h3>
-                        <p>elevation: <span data-bind="text: elevation"></span></p>
-                        <p>placeID: <span data-bind="text: placeId"></span></p>
-                        <p>address: <span data-bind="text: address"></span></p>
-                        <p>rating: <span data-bind="text: rating"></span></p>
-                        <p>openNow: <span data-bind="text: openNow"></span></p>
-                    </div>
-
-            </div>
-            <div class="col-xs-12 col-md-6 map">
+            <div class="col-xs-12 col-md-6 push-md-3 map">
                 <div id="map"></div>
             </div>
-            <div class="col-xs-12 col-md-3 news">
+            <div class="col-xs-6 col-md-3 pull-md-6 item-list">
+                <div data-bind="foreach: markerData">
+                    <h3 data-bind="text: name"></h3>
+                    <div>elevation: <span data-bind="text: elevation"></span></div>
+                    <div>placeID: <span data-bind="text: placeId"></span></div>
+                    <div>address: <span data-bind="text: address"></span></div>
+                    <div>rating: <span data-bind="text: rating"></span></div>
+                    <div>openNow: <span data-bind="text: openNow"></span></div>
+                </div>
+            </div>
+            <div class="col-xs-6 col-md-3 news">
                 <h3>Bike News from NewYorkTimes</h3>
                 <div data-bind="foreach: newsItems">
                     <a data-bind="attr: {href: url}" target="_blank">
