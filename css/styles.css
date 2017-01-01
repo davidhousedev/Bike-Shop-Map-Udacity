@@ -25,3 +25,12 @@ html, body, .container-fluid, .row, .map {
     background-color: black;
     display: none;
 }
+
+/* Solution for making KnockoutJS binds work with Bootstrap button groups */
+/* Sourced from: https://volaresystems.com/blog/post/2013/12/09/Using-Bootstrap-3-radio-button-groups-with-Knockout-3-data-bindings */
+label.btn > input[type='radio'] {
+    display: none;
+}
+label.btn > input[type='checkbox'] {
+    display: none;
+}

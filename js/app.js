@@ -34,11 +34,22 @@ var ViewModel = function() {
     self.markerData = ko.observableArray([]);
     self.newsItems = ko.observableArray([]);
 
+    // Observables for search filters
+    self.openNow = ko.observable(false);
+    self.elevations = ko.observableArray(['low', 'med', 'high']);
+    self.ratingMin = ko.observable(1);
+    self.searchText = ko.observable('');
+
+    self.filterResults = function() {
+        console.log(self.openNow(), self.elevations(), self.ratingMin(), self.searchText());
+    };
+
     self.clearList = function() {
         self.markerData.removeAll();
     };
 
     self.addGoogleListItem = function(googlePlace) {
+        console.log('value of openNow is: ' + self.openNow());
         //console.log(googlePlace);
         var itemData = {
             name: googlePlace.name,
@@ -101,6 +112,7 @@ var ViewModel = function() {
             $(".news").addClass('hidden-xs-up');
         });
     };
+
 };
 
 
@@ -304,7 +316,7 @@ function createMarker(place) {
 function updateMarkersElevation() {
     var markerPositions = [];
     mapMarkers.forEach(function(marker){
-        markerPositions.push(marker.getPosition())
+        markerPositions.push(marker.getPosition());
     });
 
     elevationService.getElevationForLocations({
@@ -398,7 +410,7 @@ function getElevationRange(elevationObjs) {
     console.log(elevations);
     var max = Math.max(...elevations);
     var min = Math.min(...elevations);
-    var increment = Math.round((max - min) / 3)
+    var increment = Math.round((max - min) / 3);
     var lowElevMax = increment + min;
     var midElevMax = (increment * 2) + min;
     return [min, lowElevMax, midElevMax, max];
