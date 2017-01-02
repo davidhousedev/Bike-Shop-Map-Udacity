@@ -41,41 +41,45 @@
 
     <div class="container-fluid">
         <div class="navbar navbar-light bg-faded">
-            <h3 class="navbar-brand">Seattle Bike Shops</h3>
-            <!-- KnockoutJS Integration with Bootstrap button groups sourced from this article: https://volaresystems.com/blog/post/2013/12/09/Using-Bootstrap-3-radio-button-groups-with-Knockout-3-data-bindings -->
-            <div class="btn-group">
-                <label for="open-now" data-bind="css: { 'active': openNow() === true }" class="btn btn-outline-secondary btn-sm">
-                    <input data-bind="checked: openNow" id="open-now" type="checkbox" autocomplete="off">Open Now
-                </label>
-            </div>
-            <span class="navbar-text">Elevation: </span>
-            <div class="btn-group" data-bind="visible: elevations">
-                <label for="elev-low" data-bind="css: { 'active': elevations().includes('low') }" class="btn btn-outline-success btn-sm">
-                    <input value="low" data-bind="checked: elevations" type="checkbox" id="elev-low" autocomplete="off">low
-                </label>
-                <label for="elev-med" data-bind="css: { 'active': elevations().includes('med') }" class="btn btn-outline-warning btn-sm">
-                    <input value="med" data-bind="checked: elevations" type="checkbox" id="elev-med" autocomplete="off">med
-                </label>
-                <label for="elev-high" data-bind="css: { 'active': elevations().includes('high') }" class="btn btn-outline-danger btn-sm">
-                    <input value="high" data-bind="checked: elevations" type="checkbox" id="elev-high" autocomplete="off">high
-                </label>
-            </div>
-            <span class="navbar-text">Min. Rating: </span>
-            <div class="btn-group">
-                <label for="rating-none" data-bind="css: { 'active': ratingMin() === false }" class="btn btn-outline-secondary btn-sm">
-                    <input data-bind="checked: ratingMin, checkedValue: false" id="rating-none" type="radio" autocomplete="off">None
-                </label>
-                <label for="rating3" data-bind="css: { 'active': ratingMin() === 3 }" class="btn btn-outline-secondary btn-sm">
-                    <input data-bind="checked: ratingMin, checkedValue: 3" id="rating3" type="radio" autocomplete="off">3
-                </label>
-                <label for="rating4" data-bind="css: { 'active': ratingMin() === 4 }" class="btn btn-outline-secondary btn-sm">
-                    <input data-bind="checked: ratingMin, checkedValue: 4" id="rating4" type="radio" autocomplete="off">4
-                </label>
-                <label for="rating5" data-bind="css: { 'active': ratingMin() === 5 }" class="btn btn-outline-secondary btn-sm">
-                    <input data-bind="checked: ratingMin, checkedValue: 5" id="rating5" type="radio" autocomplete="off">5
-                </label>
-            </div>
-             <input data-bind="textInput: searchText" type="text" class="form-control" placeholder="search">
+            <button class="navbar-toggler hidden-md-up" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"></button>
+            <div class="collapse navbar-toggleable-sm" id="navbarResponsive"> <!-- Begin collapsable navbar -->
+                <h3 class="navbar-brand">Seattle Bike Shops</h3>
+                <!-- KnockoutJS Integration with Bootstrap button groups sourced from this article: https://volaresystems.com/blog/post/2013/12/09/Using-Bootstrap-3-radio-button-groups-with-Knockout-3-data-bindings -->
+
+                <div class="btn-group nav navbar-nav">
+                    <label for="open-now" data-bind="css: { 'active': openNow() === true }" class="btn btn-outline-secondary btn-sm">
+                        <input data-bind="checked: openNow" id="open-now" type="checkbox" autocomplete="off">Open Now
+                    </label>
+                </div>
+                <span class="navbar-text">Elevation: </span>
+                <div class="btn-group nav navbar-nav" data-bind="visible: elevations">
+                    <label for="elev-low" data-bind="css: { 'active': elevations().includes('low') }" class="btn btn-outline-success btn-sm">
+                        <input value="low" data-bind="checked: elevations" type="checkbox" id="elev-low" autocomplete="off">low
+                    </label>
+                    <label for="elev-med" data-bind="css: { 'active': elevations().includes('med') }" class="btn btn-outline-warning btn-sm">
+                        <input value="med" data-bind="checked: elevations" type="checkbox" id="elev-med" autocomplete="off">med
+                    </label>
+                    <label for="elev-high" data-bind="css: { 'active': elevations().includes('high') }" class="btn btn-outline-danger btn-sm">
+                        <input value="high" data-bind="checked: elevations" type="checkbox" id="elev-high" autocomplete="off">high
+                    </label>
+                </div>
+                <span class="navbar-text">Min. Rating: </span>
+                <div class="btn-group nav navbar-nav">
+                    <label for="rating-none" data-bind="css: { 'active': ratingMin() === false }" class="btn btn-outline-secondary btn-sm">
+                        <input data-bind="checked: ratingMin, checkedValue: false" id="rating-none" type="radio" autocomplete="off">None
+                    </label>
+                    <label for="rating3" data-bind="css: { 'active': ratingMin() === 3 }" class="btn btn-outline-secondary btn-sm">
+                        <input data-bind="checked: ratingMin, checkedValue: 3" id="rating3" type="radio" autocomplete="off">3
+                    </label>
+                    <label for="rating4" data-bind="css: { 'active': ratingMin() === 4 }" class="btn btn-outline-secondary btn-sm">
+                        <input data-bind="checked: ratingMin, checkedValue: 4" id="rating4" type="radio" autocomplete="off">4
+                    </label>
+                    <label for="rating5" data-bind="css: { 'active': ratingMin() === 5 }" class="btn btn-outline-secondary btn-sm">
+                        <input data-bind="checked: ratingMin, checkedValue: 5" id="rating5" type="radio" autocomplete="off">5
+                    </label>
+                </div>
+            </div> <!-- End collapsable navbar -->
+            <input data-bind="textInput: searchText" type="text" class="form-control" placeholder="search">
         </div>
         <div class="row">
             <div class="col-xs-12 col-md-6 push-md-3 map">

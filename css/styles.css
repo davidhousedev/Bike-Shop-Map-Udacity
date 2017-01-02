@@ -52,6 +52,10 @@ html, body, .row, .map {
     margin-right: 5px;
 }
 
+.navbar-toggler {
+    margin-bottom: 5px;
+}
+
 /* Solution for making KnockoutJS binds work with Bootstrap button groups */
 /* Sourced from: https://volaresystems.com/blog/post/2013/12/09/Using-Bootstrap-3-radio-button-groups-with-Knockout-3-data-bindings */
 label.btn > input[type='radio'] {
