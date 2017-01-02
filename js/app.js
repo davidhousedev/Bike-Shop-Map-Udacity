@@ -218,7 +218,7 @@ function initMap() {
     // Position custom legend. Starts hidden, and is shown if elevation
     // data is successfully retrieved
     var elevLegend = document.getElementById('elevLegend');
-    map.controls[google.maps.ControlPosition.LEFT_TOP].push(elevLegend);
+    map.controls[google.maps.ControlPosition.RIGHT_TOP].push(elevLegend);
 
     // Search for bike shops once map idle
     map.addListener('idle', getPlaceIds);
@@ -390,7 +390,7 @@ function createMarker(place) {
     var marker = new google.maps.Marker({
         position: placeLatLng,
         title: place.name,
-        icon: markerIcon('black', 'black')
+        icon: markerIcon('black')
     });
 
     // Populate marker with info from place query
@@ -449,12 +449,36 @@ function updateMarkersElevation() {
                 }
 
             }
-            var $elevationLegend = $("#elevLegend");
-            $elevationLegend.find('#elevMax').text(elevationRanges[3]);
-            $elevationLegend.find('#elevMin').text(elevationRanges[0]);
-            $elevationLegend.css('display', 'block');
+
+            updateMapLegend(elevationRanges[0], elevationRanges[3]);
         }
     });
+}
+
+// Update map legend with current elevation min/max
+function updateMapLegend(elevMin, elevMax) {
+    var $elevationLegend = $("#elevLegend");
+
+    // Add icons
+    $elevationLegend.find('#high').attr('style', 'background-color: red');
+    $elevationLegend.find('#med').attr('style', 'background-color: yellow');
+    $elevationLegend.find('#low').attr('style', 'background-color: green');
+
+    // Populate text
+    var elevMid = Math.round((elevMax - elevMin) / 2 + elevMin);
+    $elevationLegend.find('#elevMax').text('~' + elevMax + 'm');
+    $elevationLegend.find('#elevMid').text('~' + elevMid + 'm');
+    $elevationLegend.find('#elevMin').text('~' + elevMin + 'm');
+
+    // Display legend if it is hidden
+    $elevationLegend.css('display', 'block');
+
+    function createLegendImage(color) {
+        var $image = $(document.createElement('div'));
+        $image.attr('style', 'background-color: ' + color);
+        $image.addClass('map-legend-color');
+        return $image;
+    }
 }
 
 // Whenever place list is filtered, show markers that are included
@@ -483,7 +507,7 @@ function changeMapMarkerColor(marker, color){
     marker.setIcon(markerIcon(color, color));
 }
 
-function markerIcon(strokeColor, fillColor){
+function markerIcon(fillColor){
     return {
         path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
         scale: 4,

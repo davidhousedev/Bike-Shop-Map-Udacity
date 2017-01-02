@@ -23,7 +23,22 @@
     <title>Seattle Bike Shops</title>
 </head>
 <body>
-    <div id="elevLegend"><h3 id="elevMax"></h3><h3 id="elevMin"></h3></div>
+    <div id="elevLegend">
+        <div id="legend-title" class="legend-row"><strong>Elevations</strong></div>
+        <div class="legend-row">
+            <div id="high" class="map-legend-color"></div>
+            <span id="elevMax"></span>
+        </div>
+        <div class="legend-row">
+            <div id="med" class="map-legend-color"></div>
+            <span id="elevMid"></span>
+        </div>
+        <div class="legend-row">
+            <div id="low" class="map-legend-color"></div>
+            <span id="elevMin"></span>
+        </div>
+    </div>
+
     <div class="container-fluid">
         <div class="navbar navbar-light bg-faded">
             <h3 class="navbar-brand">Seattle Bike Shops</h3>
@@ -68,7 +83,7 @@
             </div>
             <div class="col-xs-6 col-md-3 pull-md-6 item-list">
                 <div data-bind="foreach: filteredList">
-                    <h6 data-bind="text: name, click: $parent.openMapInfoWindow"></h6>
+                    <h6 class="list-item" data-bind="text: name, click: $parent.openMapInfoWindow"></h6>
                 </div>
             </div>
             <div class="col-xs-6 col-md-3 news">
