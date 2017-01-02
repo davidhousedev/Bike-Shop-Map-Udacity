@@ -120,8 +120,6 @@ var ViewModel = function() {
     };
 
     self.addGoogleListItem = function(googlePlace) {
-        console.log('value of openNow is: ' + self.openNow());
-        //console.log(googlePlace);
         var itemData = {
             name: googlePlace.name,
             placeId: googlePlace.place_id,
@@ -165,7 +163,6 @@ var ViewModel = function() {
             url: url,
             method: 'GET',
         }).done(function(result) {
-            console.log(result);
             result.response.docs.forEach(function(article){
                 // Display all articles that aren't local to NYC
                 if (article.section_name != 'N.Y. / Region'){
@@ -316,7 +313,6 @@ function openInfoWindow(placeId) {
 }
 
 function updateInfoWindow(content) {
-    console.log(content);
 
     if (content.source === 'google') {
         var $googleDiv = $(document.createElement('div'));
@@ -356,7 +352,6 @@ function getGooglePlaceDetails(placeId) {
         placeId: placeId
     }, function(place, status) {
         if (status === google.maps.places.PlacesServiceStatus.OK) {
-            console.log(place);
             var dateIndex = getDayOfWeekNum();
             var content = {
                 source: 'google',
@@ -364,7 +359,6 @@ function getGooglePlaceDetails(placeId) {
                 name: place.name,
                 address: place.vicinity,
             };
-            console.log('date index is: ' + dateIndex);
             // For data that may not be present, check before storing
             content.rating = place.rating ? place.rating : null;
             content.phone = place.formatted_phone_number ?
@@ -508,7 +502,6 @@ function clearMap() {
             marker.setMap(null);
             var markerIndex;
             mapMarkers.splice(mapMarkers.indexOf(marker), 1);
-            //console.log(mapMarkers);
         }
     });
 
@@ -530,7 +523,6 @@ function getElevationRange(elevationObjs) {
     elevationObjs.forEach(function(elevationObj) {
         elevations.push(Math.round(elevationObj.elevation));
     });
-    console.log(elevations);
     var max = Math.max(...elevations);
     var min = Math.min(...elevations);
     var increment = Math.round((max - min) / 3);
