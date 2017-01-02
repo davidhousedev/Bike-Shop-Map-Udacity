@@ -39,7 +39,7 @@ var ViewModel = function() {
 
     // Observables for search filters
     self.openNow = ko.observable(false);
-    self.elevations = ko.observableArray(['low', 'med', 'high']);
+    self.elevations = ko.observableArray(['unknown', 'low', 'med', 'high']);
     self.ratingMin = ko.observable(false);
     self.searchText = ko.observable('');
 
@@ -123,6 +123,7 @@ var ViewModel = function() {
             placeId: googlePlace.place_id,
             rating: googlePlace.rating,
             address: googlePlace.vicinity,
+            elevation: 'unknown'
         };
 
         if (googlePlace.opening_hours) {
@@ -187,20 +188,18 @@ var viewModel = new ViewModel();
 ko.applyBindings(viewModel);
 viewModel.populateNews();
 
+checkGoogleResourcesLoaded();
+
+
+
+
+
 
 /**
  * Google Map API and Marker handling
  */
 
 function initMap() {
-
-    setTimeout(function(){
-        if (!placeService) {
-            console.log('Error: Google Maps could not be loaded. ' +
-                  'Please try again later.');
-        }
-    }, 100);
-
     map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 47.606, lng: -122.332},
         zoom: 13,
@@ -254,6 +253,31 @@ function getPlaceIds() {
 
     placeService.nearbySearch(request, callback);
 }
+
+function checkGoogleResourcesLoaded() {
+    window.setTimeout(function() {
+        if (typeof google == 'undefined') {
+            alert('Error: Google Maps could not be loaded. ' +
+                  'Please try again later.');
+        }
+    }, 1000);
+
+    window.setTimeout(function() {
+        if (!mapMarkers.toString()) {
+            alert('Error: Location details could not be retrieved. ' +
+                  'Please try again later.');
+        } else {
+            if (typeof mapMarkers[0].elevation == 'undefined') {
+                alert('Error: Could not obtain elevation data');
+            }
+        }
+    }, 3000);
+}
+
+
+
+
+
 
 
 /**
@@ -451,7 +475,7 @@ function hideSpecifiedMarkers(placeIds) {
 
 function bounceMarker(marker) {
     marker.setAnimation(google.maps.Animation.BOUNCE);
-    window.setTimeout(function(){
+    window.setTimeout(function() {
         marker.setAnimation(null);
     }, 700);
 }
