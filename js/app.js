@@ -7,13 +7,17 @@ var infoWindow;
 var infoWindowContent;
 var mapMarkers = [];
 
+
+
+
+
+
 /**
  * KnockoutJS dynamic list handling
  */
 
 var ListMarker = function(data) {
-    /*this.lat = ko.observable(data.lat || null);
-    this.lon = ko.observable(data.lon || null);*/
+
     this.name = ko.observable(data.name || null);
     this.elevation = ko.observable(data.elevation || null);
     this.placeId = ko.observable(data.placeId || null);
@@ -279,7 +283,6 @@ function checkGoogleResourcesLoaded() {
 
 
 
-
 /**
  * Info Window operations
  */
@@ -299,17 +302,14 @@ function openInfoWindow(placeId) {
             var $addr = $(document.createElement('div'));
             $addr.text(mapMarkers[i].address);
             infoWindowContent.appendChild($title[0]);
-            //infoWindowContent.appendChild(document.createElement('br'))
             infoWindowContent.appendChild($addr[0]);
 
-            /*var contentDiv = document.getElementById('info-content');*/
             infoWindow = new google.maps.InfoWindow({
                 content: infoWindowContent,
             });
             infoWindow.open(map, marker);
             bounceMarker(marker);
 
-            //infoWindow.setContent('hello, David');
             getGooglePlaceDetails(placeId);
         }
     }
@@ -338,7 +338,7 @@ function updateInfoWindow(content) {
             var $websiteWrapper = $(document.createElement('div'));
             var $websiteLink = $(document.createElement('a'));
             $websiteLink.attr('href', content.website);
-            $websiteLink.attr('target', '_blank'); // Open link in new tab
+            $websiteLink.attr('target', '_blank');  // Open link in new tab
             $websiteLink.text('website');
             $websiteWrapper.append($websiteLink);
             $googleDiv.append($websiteWrapper);
@@ -379,6 +379,10 @@ function getGooglePlaceDetails(placeId) {
 }
 
 
+
+
+
+
 /**
  * Map marker operations
  */
@@ -387,7 +391,6 @@ function createMarker(place) {
     var placeLat = place.geometry.location.lat();
     var placeLng = place.geometry.location.lng();
 
-    // Image sourced from Wikipedia
     var image = {
         path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
         scale: 4,
@@ -430,8 +433,7 @@ function updateMarkersElevation() {
             for (var i = 0; i < results.length; i++) {
                 var elevLatLng = results[i].location.toUrlValue(5);
                 var markerLatLng = mapMarkers[i].getPosition().toUrlValue(5);
-                //console.log('elev map marker:')
-                //console.log(mapMarkers[i]);
+
                 if (elevLatLng == markerLatLng) {
                     if (results[i].elevation < elevationRanges[1]) {
                         changeMapMarkerColor(mapMarkers[i], 'green');
@@ -512,9 +514,12 @@ function clearMap() {
 
     // Remove any hidden locations from list view
     viewModel.removeGoogleListItems(clearListIds);
-
-    //mapMarkers = [];
 }
+
+
+
+
+
 
 /*
  * Helpers
