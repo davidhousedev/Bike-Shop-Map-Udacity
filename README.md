@@ -7,25 +7,32 @@ This project was developed in conjunction with the Full Stack Web Developer Nano
 # Libraries and APIs
 
 ### Libraries
+* __[KnockoutJS](http://knockoutjs.com/)__ - Javascript framework for handling automatic UI refreshing
+* __[Twitter Bootstrap](https://v4-alpha.getbootstrap.com/)__ - CSS Framework used to create responsive application UI
+* __[jQuery](https://jquery.com/)__ - DOM manipulation library
 * __[FuseJS](http://fusejs.io/)__ - Lightweight fuzzy-search library. Used to search bike shop results.
 
 ### APIs
+* __[Google Maps Javascript API](https://developers.google.com/maps/documentation/javascript/)__ - Creates bike shop map and handles retrieval of shop and elevation information
+* __[New York Times Article Search API](https://developer.nytimes.com/article_search_v2.json)__ - Displays articles from New York Times relevant to bicycling
 
 ### File Directory
-* __database__ - Handles SQAlchemy database sessions, interface between database controller and models
-    * __create.py__ - Creates new entities in models
-    * __get.py__ - Retrieves existing entities from models
-    * __update.py__ - Makes changes to existing entities in models
-    * __delete.py__ - Deletes entities from database models
-    * __database_helpers.py__ - Helpers for text, list, and api operations used in all database functions
+* __js__
+    * __app.js__ - Primary JavaScript file
+* __css__
+    * __styles.css__ - Primary CSS file
+* __index.html__ - Primary application file, open this in your web browser to start the application
+* __bower.json__ - Bower package manager configuration file
+* __bower_components__ - Stores application dependencies
 
 
 
 # Requirements:
-
+The only requirement for this app is a modern web browser. The JavaScript used for this project utilizes features that are not supported on legacy browsers.
 
 # Installation Instructions
-1.
+1. Clone the repository to your local machine
+2. Open `index.html` in a modern web browser of your choice
 
 # Author
 
