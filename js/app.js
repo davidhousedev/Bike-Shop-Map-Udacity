@@ -69,13 +69,13 @@ var ViewModel = function() {
         if (self.searchText()) {
 
             // Serialize list for searching
-            var fuseSearchArry = []
+            var fuseSearchArry = [];
             currentList.forEach(function(item){
                 var obj = {
                     name: item.name(),
                     address: item.address(),
                     placeId: item.placeId()
-                }
+                };
                 fuseSearchArry.push(obj);
             });
 
@@ -94,10 +94,10 @@ var ViewModel = function() {
                     "address"
                 ]
             };
-
+            // Initialize FuseJS library for searching place names/addresses
             var fuse = new Fuse(fuseSearchArry, searchOptions);
             var result = fuse.search(self.searchText());
-            // hide map markers that are not present in list
+            // Hide map markers that are not present in list
             var fusePlaceIds = result.map(function(item){
                 return item.placeId;
             });
@@ -106,7 +106,7 @@ var ViewModel = function() {
             return result;
         }
 
-        // hide map markers that are not present in list
+        // Hide map markers that are not present in list
         var placeIds = currentList.map(function(item){
             return item.placeId();
         });
@@ -218,7 +218,7 @@ function initMap() {
     // Position custom legend. Starts hidden, and is shown if elevation
     // data is successfully retrieved
     var elevLegend = document.getElementById('elevLegend');
-    map.controls[google.maps.ControlPosition.LEFT_TOP].push(elevLegend)
+    map.controls[google.maps.ControlPosition.LEFT_TOP].push(elevLegend);
 
     // Search for bike shops once map idle
     map.addListener('idle', getPlaceIds);
@@ -261,7 +261,7 @@ function checkGoogleResourcesLoaded() {
             alert('Error: Google Maps could not be loaded. ' +
                   'Please try again later.');
         }
-    }, 1000);
+    }, 3000);
 
     window.setTimeout(function() {
         if (!mapMarkers.toString()) {
@@ -272,7 +272,7 @@ function checkGoogleResourcesLoaded() {
                 alert('Error: Could not obtain elevation data');
             }
         }
-    }, 3000);
+    }, 5000);
 }
 
 
@@ -381,15 +381,10 @@ function getGooglePlaceDetails(placeId) {
  * Map marker operations
  */
 
+// Places a map marker on the current google map
 function createMarker(place) {
     var placeLat = place.geometry.location.lat();
     var placeLng = place.geometry.location.lng();
-
-    var image = {
-        path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
-        scale: 4,
-        strokeColor: 'black'
-    };
 
     var placeLatLng = new google.maps.LatLng(placeLat, placeLng);
     var marker = new google.maps.Marker({
@@ -405,12 +400,16 @@ function createMarker(place) {
 
     mapMarkers.push(marker);
     marker.addListener('click', function() {
-        openInfoWindow(place.place_id)
+        openInfoWindow(place.place_id);
     });
     marker.setMap(map);
 }
 
+// For each visible map marker, retrieves its elevation
+// and updates marker color to correspond to relative elevation
 function updateMarkersElevation() {
+
+    // Get elevation data for all markers at once to minimize API queries
     var markerPositions = [];
     mapMarkers.forEach(function(marker){
         markerPositions.push(marker.getPosition());
@@ -458,6 +457,8 @@ function updateMarkersElevation() {
     });
 }
 
+// Whenever place list is filtered, show markers that are included
+// in the list, and hide markers that are not
 function hideSpecifiedMarkers(placeIds) {
     // Hide marker if its placeId is specified, else show it
     mapMarkers.forEach(function(marker) {
@@ -469,6 +470,7 @@ function hideSpecifiedMarkers(placeIds) {
     });
 }
 
+// Bounce a specific map marker once
 function bounceMarker(marker) {
     marker.setAnimation(google.maps.Animation.BOUNCE);
     window.setTimeout(function() {
@@ -476,6 +478,7 @@ function bounceMarker(marker) {
     }, 700);
 }
 
+// Change the stroke and fill color of a marker
 function changeMapMarkerColor(marker, color){
     marker.setIcon(markerIcon(color, color));
 }
@@ -484,13 +487,15 @@ function markerIcon(strokeColor, fillColor){
     return {
         path: google.maps.SymbolPath.BACKWARD_CLOSED_ARROW,
         scale: 4,
-        strokeColor: strokeColor,
+        strokeColor: 'black',
         strokeWeight: 1,
         fillColor: fillColor,
         fillOpacity: 0.5
     };
 }
 
+// Removes any list items and map markers which are
+// outside current map bounds
 function clearMap() {
     var mapBounds = map.getBounds();
     var clearListIds = [];
@@ -518,6 +523,7 @@ function clearMap() {
  * Helpers
  */
 
+// Return a 4-part range of elevations [min, lowMax, medMax, highMax]
 function getElevationRange(elevationObjs) {
     var elevations = [];
     elevationObjs.forEach(function(elevationObj) {
