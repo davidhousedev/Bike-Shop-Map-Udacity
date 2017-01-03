@@ -201,7 +201,7 @@ checkGoogleResourcesLoaded();
  */
 
 function initMap() {
-    map = new google.maps.Map(document.getElementById('map'), {
+    map = new google.maps.Map(document.getElementsByClassName('map')[0], {
         center: {lat: 47.606, lng: -122.332},
         zoom: 13,
         stylers: [{
@@ -295,9 +295,9 @@ function openInfoWindow(placeId) {
             infoWindowContent = document.createElement('div');
             infoWindowContent.setAttribute('id', 'info-content');
             var $title = $(document.createElement('strong'));
-            $title.text(mapMarkers[i].name);
+            $title.text(marker.name);
             var $addr = $(document.createElement('div'));
-            $addr.text(mapMarkers[i].address);
+            $addr.text(marker.address);
             infoWindowContent.appendChild($title[0]);
             infoWindowContent.appendChild($addr[0]);
 
@@ -308,6 +308,11 @@ function openInfoWindow(placeId) {
             bounceMarker(marker);
 
             getGooglePlaceDetails(placeId);
+
+            var markerPos = marker.getPosition();
+            getFoursquarePlaceDetails(marker[name],
+                                      markerPos.lat(),
+                                      markerPos.lng());
         }
     }
 }

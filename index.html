@@ -23,7 +23,7 @@
     <title>Seattle Bike Shops</title>
 </head>
 <body>
-    <div id="elevLegend">
+    <div class="elevLegend">
         <div id="legend-title" class="legend-row"><strong>Elevations</strong></div>
         <div class="legend-row">
             <div id="high" class="map-legend-color"></div>
@@ -82,8 +82,8 @@
             <input data-bind="textInput: searchText" type="text" class="form-control" placeholder="search">
         </div>
         <div class="row">
-            <div class="col-xs-12 col-md-6 push-md-3 map">
-                <div id="map"></div>
+            <div class="col-xs-12 col-md-6 push-md-3 map-wrapper">
+                <div class="map"></div>
             </div>
             <div class="col-xs-6 col-md-3 pull-md-6 item-list">
                 <div data-bind="foreach: filteredList">

@@ -1,4 +1,4 @@
-html, body, .row, .map {
+html, body, .row, .map-wrapper {
     height: 100%
 }
 
@@ -22,12 +22,12 @@ html, body, .row, .map {
     overflow-x: hidden;
 }
 
-#map {
+.map {
     width: 100%;
     height: 100%;
 }
 
-#elevLegend {
+.elevLegend {
     background-color: #F0F0F0;
     border: 1px solid black;
     display: none;
