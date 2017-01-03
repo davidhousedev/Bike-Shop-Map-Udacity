@@ -18,7 +18,7 @@ var mapMarkers = [];
 
 var ListMarker = function(data) {
 
-    this.name = ko.observable(data.name || null);
+    this.name = data.name;
     this.elevation = ko.observable(data.elevation || null);
     this.placeId = ko.observable(data.placeId || null);
     this.address = ko.observable(data.address || null);
@@ -375,6 +375,23 @@ function getGooglePlaceDetails(placeId) {
             updateInfoWindow(content);
         }
     });
+}
+
+function getFoursquarePlaceDetails(name, lat, lng) {
+    // https://api.foursquare.com/v2/venues/search?v=20161016&ll=40.7,-74&client_id=OYMZN0WOH3B4AWBD1F14DZAVGIK2PZX0EMPI0TDJEXY3QEXP&client_secret=Z3KHAGWGUDNQLVVX4GJPJK0SYN5RRISVIJUAXA14ZQMV5DQS
+    var BASE_URL = 'https://api.foursquare.com/v2/venues/search';
+    var CLIENT_ID = 'OYMZN0WOH3B4AWBD1F14DZAVGIK2PZX0EMPI0TDJEXY3QEXP';
+    var CLIENT_SECRET = 'Z3KHAGWGUDNQLVVX4GJPJK0SYN5RRISVIJUAXA14ZQMV5DQS';
+
+    var fullUrl = BASE_URL + '?' + $.param({
+        v: 20161016,
+        q: name,
+        ll: lat + ',' + lng,
+        client_id: CLIENT_ID,
+        client_secret: CLIENT_SECRET
+    });
+
+    function callback(){}
 }
 
 
