@@ -19,11 +19,11 @@ var mapMarkers = [];
 var ListMarker = function(data) {
 
     this.name = data.name;
-    this.elevation = ko.observable(data.elevation || null);
-    this.placeId = ko.observable(data.placeId || null);
-    this.address = ko.observable(data.address || null);
-    this.rating = ko.observable(data.rating || null);
-    this.openNow = ko.observable(data.openNow || null);
+    this.elevation = ko.observable(data.elevation);
+    this.placeId = data.placeId;
+    this.address = data.address;
+    this.rating = data.rating;
+    this.openNow = data.openNow;
 };
 
 var NewsItem = function(data) {
@@ -52,7 +52,7 @@ var ViewModel = function() {
 
         if (self.openNow()) {
             currentList = currentList.filter(function(item) {
-                return item.openNow() === true;
+                return item.openNow === true;
             });
         }
 
@@ -62,7 +62,7 @@ var ViewModel = function() {
 
         if (self.ratingMin()) {
             currentList = currentList.filter(function(item){
-                return item.rating() >= self.ratingMin();
+                return item.rating >= self.ratingMin();
             });
         }
 
@@ -73,8 +73,8 @@ var ViewModel = function() {
             currentList.forEach(function(item){
                 var obj = {
                     name: item.name(),
-                    address: item.address(),
-                    placeId: item.placeId()
+                    address: item.address,
+                    placeId: item.placeId
                 };
                 fuseSearchArry.push(obj);
             });
@@ -108,7 +108,7 @@ var ViewModel = function() {
 
         // Hide map markers that are not present in list
         var placeIds = currentList.map(function(item){
-            return item.placeId();
+            return item.placeId;
         });
         hideSpecifiedMarkers(placeIds);
 
@@ -116,7 +116,7 @@ var ViewModel = function() {
     }, this);
 
     self.openMapInfoWindow = function(listItem) {
-        openInfoWindow(listItem.placeId());
+        openInfoWindow(listItem.placeId);
     };
 
     self.addGoogleListItem = function(googlePlace) {
@@ -138,7 +138,7 @@ var ViewModel = function() {
     // Remove all list items corresponding to an array of placeIds
     self.removeGoogleListItems = function(placeIds) {
         self.markerData.remove(function(listItem) {
-            return placeIds.includes(listItem.placeId());
+            return placeIds.includes(listItem.placeId);
         });
     };
 
@@ -146,7 +146,7 @@ var ViewModel = function() {
     self.addGoogleElevation = function(placeId, elevationRating) {
         for (var i = 0; i < self.markerData().length; i++) {
             var place = self.markerData()[i];
-            if (place.placeId() == placeId) {
+            if (place.placeId == placeId) {
                 place.elevation(elevationRating);
                 break;
             }
@@ -217,7 +217,7 @@ function initMap() {
 
     // Position custom legend. Starts hidden, and is shown if elevation
     // data is successfully retrieved
-    var elevLegend = document.getElementById('elevLegend');
+    var elevLegend = document.getElementsByClassName('elevLegend')[0];
     map.controls[google.maps.ControlPosition.RIGHT_TOP].push(elevLegend);
 
     // Search for bike shops once map idle
@@ -479,7 +479,7 @@ function updateMarkersElevation() {
 
 // Update map legend with current elevation min/max
 function updateMapLegend(elevMin, elevMax) {
-    var $elevationLegend = $("#elevLegend");
+    var $elevationLegend = $(".elevLegend");
 
     // Add icons
     $elevationLegend.find('#high').attr('style', 'background-color: red');
