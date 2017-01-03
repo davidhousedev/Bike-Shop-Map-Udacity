@@ -181,6 +181,18 @@ function initMap() {
 
     // Search for bike shops once map idle
     map.addListener('idle', getPlaceIds);
+
+    // Alert user of error if elevation or place information does not load
+    window.setTimeout(function() {
+        if (!mapMarkers.toString()) {
+            alert('Error: Location details could not be retrieved. ' +
+                  'Please try again later.');
+        } else {
+            if (typeof mapMarkers[0].elevation == 'undefined') {
+                alert('Error: Could not obtain elevation data');
+            }
+        }
+    }, 5000);
 }
 
 function getPlaceIds() {
@@ -214,24 +226,8 @@ function getPlaceIds() {
     placeService.nearbySearch(request, callback);
 }
 
-function checkGoogleResourcesLoaded() {
-    window.setTimeout(function() {
-        if (typeof google == 'undefined') {
-            alert('Error: Google Maps could not be loaded. ' +
-                  'Please try again later.');
-        }
-    }, 3000);
-
-    window.setTimeout(function() {
-        if (!mapMarkers.toString()) {
-            alert('Error: Location details could not be retrieved. ' +
-                  'Please try again later.');
-        } else {
-            if (typeof mapMarkers[0].elevation == 'undefined') {
-                alert('Error: Could not obtain elevation data');
-            }
-        }
-    }, 5000);
+function googleError() {
+    alert('Error: Google Maps could not be loaded. Please try again later.');
 }
 
 
