@@ -6,20 +6,6 @@
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
-    <!-- Load dependencies -->
-    <script src="bower_components/oauth-signature/dist/oauth-signature.min.js"></script>
-    <script src="bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="bower_components/tether/dist/js/tether.min.js"></script>
-    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
-    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="bower_components/knockout/dist/knockout.js"></script>
-    <script src="bower_components/fuse.js/src/fuse.min.js"></script>
-
-
-
-    <!-- Load CSS -->
-    <link rel="stylesheet" href="css/styles.css">
-
     <title>Seattle Bike Shops</title>
 </head>
 <body>
@@ -48,34 +34,34 @@
 
                 <div class="btn-group nav navbar-nav">
                     <label for="open-now" data-bind="css: { 'active': openNow() === true }" class="btn btn-outline-secondary btn-sm">
-                        <input data-bind="checked: openNow" id="open-now" type="checkbox" autocomplete="off">Open Now
+                        <input data-bind="checked: openNow" id="open-now" type="checkbox">Open Now
                     </label>
                 </div>
                 <span class="navbar-text">Elevation: </span>
                 <div class="btn-group nav navbar-nav" data-bind="visible: elevations">
                     <label for="elev-low" data-bind="css: { 'active': elevations().includes('low') }" class="btn btn-outline-success btn-sm">
-                        <input value="low" data-bind="checked: elevations" type="checkbox" id="elev-low" autocomplete="off">low
+                        <input value="low" data-bind="checked: elevations" type="checkbox" id="elev-low">low
                     </label>
                     <label for="elev-med" data-bind="css: { 'active': elevations().includes('med') }" class="btn btn-outline-warning btn-sm">
-                        <input value="med" data-bind="checked: elevations" type="checkbox" id="elev-med" autocomplete="off">med
+                        <input value="med" data-bind="checked: elevations" type="checkbox" id="elev-med">med
                     </label>
                     <label for="elev-high" data-bind="css: { 'active': elevations().includes('high') }" class="btn btn-outline-danger btn-sm">
-                        <input value="high" data-bind="checked: elevations" type="checkbox" id="elev-high" autocomplete="off">high
+                        <input value="high" data-bind="checked: elevations" type="checkbox" id="elev-high">high
                     </label>
                 </div>
                 <span class="navbar-text">Min. Rating: </span>
                 <div class="btn-group nav navbar-nav">
                     <label for="rating-none" data-bind="css: { 'active': ratingMin() === false }" class="btn btn-outline-secondary btn-sm">
-                        <input data-bind="checked: ratingMin, checkedValue: false" id="rating-none" type="radio" autocomplete="off">None
+                        <input data-bind="checked: ratingMin, checkedValue: false" id="rating-none" type="radio">None
                     </label>
                     <label for="rating3" data-bind="css: { 'active': ratingMin() === 3 }" class="btn btn-outline-secondary btn-sm">
-                        <input data-bind="checked: ratingMin, checkedValue: 3" id="rating3" type="radio" autocomplete="off">3
+                        <input data-bind="checked: ratingMin, checkedValue: 3" id="rating3" type="radio">3
                     </label>
                     <label for="rating4" data-bind="css: { 'active': ratingMin() === 4 }" class="btn btn-outline-secondary btn-sm">
-                        <input data-bind="checked: ratingMin, checkedValue: 4" id="rating4" type="radio" autocomplete="off">4
+                        <input data-bind="checked: ratingMin, checkedValue: 4" id="rating4" type="radio">4
                     </label>
                     <label for="rating5" data-bind="css: { 'active': ratingMin() === 5 }" class="btn btn-outline-secondary btn-sm">
-                        <input data-bind="checked: ratingMin, checkedValue: 5" id="rating5" type="radio" autocomplete="off">5
+                        <input data-bind="checked: ratingMin, checkedValue: 5" id="rating5" type="radio">5
                     </label>
                 </div>
             </div> <!-- End collapsable navbar -->
@@ -104,13 +90,22 @@
         </div>
     </div>
 
+    <!-- Load dependencies -->
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/tether/dist/js/tether.min.js"></script>
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="bower_components/knockout/dist/knockout.js"></script>
+    <script src="bower_components/fuse.js/src/fuse.min.js"></script>
 
-
-</body>
-</html>
+    <!-- Load CSS -->
+    <link rel="stylesheet" href="css/styles.css">
 
     <!-- Load application -->
     <script src="js/app.js"></script>
 
     <!-- Load map -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyABqf6f1VCnwQoMNJnFaFelAfXiWu-08pA&callback=initMap&libraries=places" async defer></script>
+
+</body>
+</html>
