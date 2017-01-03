@@ -26,20 +26,10 @@ var ListMarker = function(data) {
     this.openNow = data.openNow;
 };
 
-var NewsItem = function(data) {
-    this.title = ko.observable(data.title);
-    this.snippet = ko.observable(data.snippet);
-    this.url = ko.observable(data.url);
-    this.published = ko.observable(data.published);
-};
-
-
 var ViewModel = function() {
     var self = this;
     // Observables for item lists
     self.markerData = ko.observableArray([]);
-    self.newsItems = ko.observableArray([]);
-    self.newsError = ko.observable();
 
     // Observables for search filters
     self.openNow = ko.observable(false);
@@ -152,42 +142,11 @@ var ViewModel = function() {
             }
         }
     };
-
-    self.populateNews = function() {
-        var url = "https://api.nytimes.com/svc/search/v2/articlesearch.json";
-        url += '?' + $.param({
-            'api-key': "d553ebd4180c476d9b4a0faee6f69641",
-          'q': "seattle bicycle bike"
-        });
-        $.ajax({
-            url: url,
-            method: 'GET',
-        }).done(function(result) {
-            result.response.docs.forEach(function(article){
-                // Display all articles that aren't local to NYC
-                if (article.section_name != 'N.Y. / Region'){
-                    var pubDate = new Date(article.pub_date);
-                    var data = {
-                        title: article.headline.main,
-                        snippet: article.snippet,
-                        url: article.web_url,
-                        published: pubDate.getFullYear()
-                    };
-
-                    self.newsItems.push(new NewsItem(data));
-                }
-            });
-        }).fail(function(err) {
-            self.newsError('Error: Could not retrieve articles from New York Times');
-        });
-    };
-
 };
 
 
 var viewModel = new ViewModel();
 ko.applyBindings(viewModel);
-viewModel.populateNews();
 
 checkGoogleResourcesLoaded();
 

@@ -68,23 +68,12 @@
             <input data-bind="textInput: searchText" type="text" class="form-control" placeholder="search">
         </div>
         <div class="row">
-            <div class="col-xs-12 col-md-6 push-md-3 map-wrapper">
+            <div class="col-xs-12 col-md-9 push-md-3 map-wrapper">
                 <div class="map"></div>
             </div>
-            <div class="col-xs-6 col-md-3 pull-md-6 item-list">
+            <div class="col-xs-12 col-md-3 pull-md-9 item-list">
                 <div data-bind="foreach: filteredList">
                     <h6 class="list-item" data-bind="text: name, click: $parent.openMapInfoWindow"></h6>
-                </div>
-            </div>
-            <div class="col-xs-6 col-md-3 news">
-                <h3>Bike News from NewYorkTimes</h3>
-                <h6 data-bind="text: newsError"></h6>
-                <div data-bind="foreach: newsItems">
-                    <a data-bind="attr: {href: url}" target="_blank">
-                        <h5 data-bind="text: title"></h5>
-                    </a>
-                    <small data-bind="text: snippet"></small>
-                    <small data-bind="text: published"></small>
                 </div>
             </div>
         </div>
