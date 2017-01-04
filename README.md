@@ -4,6 +4,8 @@ This project displays a google map with custom markers for any bike shops within
 
 This project was developed in conjunction with the Full Stack Web Developer Nanodegree at [Udacity.com](https://www.udacity.com/course/full-stack-web-developer-nanodegree--nd004).
 
+This project is currently live on its [Github Page](https://davidhousedev.github.io/Bike-Shop-Map-Udacity/)
+
 # Libraries and APIs
 
 ### Libraries
