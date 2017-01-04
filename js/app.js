@@ -69,7 +69,7 @@ var ViewModel = function() {
             var fuseSearchArry = [];
             currentList.forEach(function(item){
                 var obj = {
-                    name: item.name(),
+                    name: item.name,
                     address: item.address,
                     placeId: item.placeId
                 };
@@ -99,7 +99,6 @@ var ViewModel = function() {
                 return item.placeId;
             });
             hideSpecifiedMarkers(fusePlaceIds);
-
             return result;
         }
 
