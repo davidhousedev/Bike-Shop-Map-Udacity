@@ -5,6 +5,7 @@ var placeService;
 var elevationService;
 var infoWindow;
 var infoWindowContent;
+var fourSquareErrorFlag = false;
 var mapMarkers = [];
 
 
@@ -368,6 +369,7 @@ function getFoursquarePlaceDetails(name, address, lat, lng) {
 
     var options = {
         success: successCallback,
+        error: errorCallback
     };
 
     function successCallback(data) {
@@ -420,6 +422,13 @@ function getFoursquarePlaceDetails(name, address, lat, lng) {
                 // Send serialized data to info window
                 updateInfoWindow(resultData);
             }
+        }
+    }
+
+    function errorCallback() {
+        if (fourSquareErrorFlag === false) {
+            alert('Error: Could not retrieve traffic or twitter data from Foursquare');
+            fourSquareErrorFlag = true;
         }
     }
 
