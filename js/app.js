@@ -287,20 +287,19 @@ function updateInfoWindow(content) {
         html = '<div>';
 
         if (content.hours) {
-            html += '<div>' + content.hours + '</div>';
+            html += `<div>${content.hours}</div>`;
         }
 
         if (content.phone) {
-            html += '<div>' + content.phone + '</div>';
+            html += `<div>${content.phone}</div>`;
         }
 
         if (content.rating) {
-            html += '<div>Google Rating: ' + content.rating + '/5</div>';
+            html += `<div>Google Rating: ${content.rating}/5</div>`;
         }
 
         if (content.website) {
-            html += '<div><a href="' + content.website + '" target="_blank">' +
-                          'website</a></div>';
+            html += `<div><a href="${content.website}" target="_blank">website</a></div>`;
         }
         html += '</div>';
         infoWindowContent += html;
@@ -308,13 +307,12 @@ function updateInfoWindow(content) {
         html = '<div>';
 
         if (content.usersCount) {
-            html += '<div>Foursquare Visitors: ' + content.usersCount + '</div>';
+            html += `<div>Foursquare Visitors: ${content.usersCount}</div>`;
         }
 
         if (content.twitter) {
             html += '<div>';
-            html += '<a href="https://twitter.com/' + content.twitter + '"' +
-                    'target="_blank">twitter</a>';
+            html += `<a href="https://twitter.com/${content.twitter}" target="_blank">twitter</a>`;
             html += '</div>';
         }
 
