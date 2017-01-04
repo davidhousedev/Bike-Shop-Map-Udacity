@@ -9,19 +9,19 @@
     <title>Seattle Bike Shops</title>
 </head>
 <body>
-    <div class="elevLegend">
-        <div id="legend-title" class="legend-row"><strong>Elevations</strong></div>
+    <div data-bind="style: {display: showLegend() ? 'block' : 'none'}" class="elevLegend">
+        <div class="legend-row legend-title"><strong>Elevations</strong></div>
         <div class="legend-row">
-            <div id="high" class="map-legend-color"></div>
-            <span id="elevMax"></span>
+            <div class="map-legend-color red"></div>
+            <span data-bind="text: legendElevMax" id="elevMax"></span>
         </div>
         <div class="legend-row">
-            <div id="med" class="map-legend-color"></div>
-            <span id="elevMid"></span>
+            <div class="map-legend-color yellow"></div>
+            <span data-bind="text: legendElevMid" id="elevMid"></span>
         </div>
         <div class="legend-row">
-            <div id="low" class="map-legend-color"></div>
-            <span id="elevMin"></span>
+            <div class="map-legend-color green"></div>
+            <span data-bind="text: legendElevMin" id="elevMin"></span>
         </div>
     </div>
 

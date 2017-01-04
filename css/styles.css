@@ -24,7 +24,6 @@ html, body, .row, .map-wrapper {
 .elevLegend {
     background-color: #F0F0F0;
     border: 1px solid black;
-    display: none;
     margin: 10px;
 }
 
@@ -37,7 +36,7 @@ html, body, .row, .map-wrapper {
     margin-left: 5px;
 }
 
-#legend-title {
+.legend-title {
     text-align: center;
 }
 
@@ -48,6 +47,18 @@ html, body, .row, .map-wrapper {
 
 .navbar-toggler {
     margin-bottom: 5px;
+}
+
+.red {
+    background-color: red;
+}
+
+.yellow {
+    background-color: yellow;
+}
+
+.green {
+    background-color: green;
 }
 
 /* Solution for making KnockoutJS binds work with Bootstrap button groups */

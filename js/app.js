@@ -37,6 +37,12 @@ var ViewModel = function() {
     self.ratingMin = ko.observable(false);
     self.searchText = ko.observable('');
 
+    // Observables for map elevation legend
+    self.legendElevMax = ko.observable();
+    self.legendElevMid = ko.observable();
+    self.legendElevMin = ko.observable();
+    self.showLegend = ko.observable(false); // Legend hidden by default
+
     self.filteredList = ko.computed(function() {
         var currentList = self.markerData();
 
@@ -142,13 +148,18 @@ var ViewModel = function() {
             }
         }
     };
+
+    self.setMapLegendRange = function(elevMax, elevMid, elevMin) {
+        self.legendElevMax('~' + elevMax + 'm');
+        self.legendElevMid('~' + elevMid + 'm');
+        self.legendElevMin('~' + elevMin + 'm');
+        self.showLegend(true);
+    };
 };
 
 
 var viewModel = new ViewModel();
 ko.applyBindings(viewModel);
-
-checkGoogleResourcesLoaded();
 
 
 
@@ -192,7 +203,7 @@ function initMap() {
                 alert('Error: Could not obtain elevation data');
             }
         }
-    }, 5000);
+    }, 8000);
 }
 
 function getPlaceIds() {
@@ -265,7 +276,8 @@ function openInfoWindow(placeId) {
             getGooglePlaceDetails(placeId);
 
             var markerPos = marker.getPosition();
-            getFoursquarePlaceDetails(marker[name],
+            getFoursquarePlaceDetails(marker.name,
+                                      marker.address,
                                       markerPos.lat(),
                                       markerPos.lng());
         }
@@ -332,8 +344,8 @@ function getGooglePlaceDetails(placeId) {
     });
 }
 
-function getFoursquarePlaceDetails(name, lat, lng) {
-    // https://api.foursquare.com/v2/venues/search?v=20161016&ll=40.7,-74&client_id=OYMZN0WOH3B4AWBD1F14DZAVGIK2PZX0EMPI0TDJEXY3QEXP&client_secret=Z3KHAGWGUDNQLVVX4GJPJK0SYN5RRISVIJUAXA14ZQMV5DQS
+function getFoursquarePlaceDetails(name, address, lat, lng) {
+
     var BASE_URL = 'https://api.foursquare.com/v2/venues/search';
     var CLIENT_ID = 'OYMZN0WOH3B4AWBD1F14DZAVGIK2PZX0EMPI0TDJEXY3QEXP';
     var CLIENT_SECRET = 'Z3KHAGWGUDNQLVVX4GJPJK0SYN5RRISVIJUAXA14ZQMV5DQS';
@@ -342,11 +354,67 @@ function getFoursquarePlaceDetails(name, lat, lng) {
         v: 20161016,
         q: name,
         ll: lat + ',' + lng,
+        radius: 5,
+        address: address,
         client_id: CLIENT_ID,
         client_secret: CLIENT_SECRET
     });
 
-    function callback(){}
+    console.log(fullUrl);
+
+    var options = {
+        success: successCallback,
+    };
+
+    function successCallback(data) {
+        // Due to repeated difficulties getting Foursquare API's intent=match
+        // parameter to function as documented, I use FuseJS to search through
+        // results looking for a match. I use a very strict search threshold
+        // (0.01) to ensure that results will only be displayed if a match is
+        // almost certain.
+        var venues = data.response.venues;
+        var options = {
+            shouldSort: true,
+            tokenize: true,
+            threshold: 0.1,
+            location: 0,
+            distance: 100,
+            maxPatternLength: 32,
+            minMatchCharLength: 1,
+            keys: [
+                "name"
+            ]
+        };
+        var fuse = new Fuse(venues, options);
+
+        // Remove any special characters from shop name, as they will interfere
+        // with FuseJS RegExp search functions
+        // RegExp syntax sourced from this post: http://stackoverflow.com/a/4374890
+        var safeName = name.replace(/[^\w\s]/gi, '');
+
+        var result = fuse.search(safeName);
+        console.log(result);
+        var firstResult = result[0];
+        // Check if FuseJS search returned any results
+        if (firstResult) {
+            // If result has any useful data, organize it in an object and
+            // send result to be added to a map marker
+            if (firstResult.stats.usersCount || firstResult.contact.twitter) {
+                var resultData = {};
+                if (firstResult.stats.usersCount) {
+                    console.log(firstResult.stats.usersCount);
+                    resultData.usersCount = firstResult.stats.usersCount;
+                }
+                if (firstResult.contact.twitter) {
+                    console.log(firstResult.contact.twitter);
+                    resultData.twitter = firstResult.contact.twitter;
+                }
+            }
+        }
+    }
+
+    // Send request to Foursquare API
+    $.ajax(fullUrl, options);
 }
 
 
@@ -434,28 +502,8 @@ function updateMarkersElevation() {
 
 // Update map legend with current elevation min/max
 function updateMapLegend(elevMin, elevMax) {
-    var $elevationLegend = $(".elevLegend");
-
-    // Add icons
-    $elevationLegend.find('#high').attr('style', 'background-color: red');
-    $elevationLegend.find('#med').attr('style', 'background-color: yellow');
-    $elevationLegend.find('#low').attr('style', 'background-color: green');
-
-    // Populate text
     var elevMid = Math.round((elevMax - elevMin) / 2 + elevMin);
-    $elevationLegend.find('#elevMax').text('~' + elevMax + 'm');
-    $elevationLegend.find('#elevMid').text('~' + elevMid + 'm');
-    $elevationLegend.find('#elevMin').text('~' + elevMin + 'm');
-
-    // Display legend if it is hidden
-    $elevationLegend.css('display', 'block');
-
-    function createLegendImage(color) {
-        var $image = $(document.createElement('div'));
-        $image.attr('style', 'background-color: ' + color);
-        $image.addClass('map-legend-color');
-        return $image;
-    }
+    viewModel.setMapLegendRange(elevMax, elevMid, elevMin);
 }
 
 // Whenever place list is filtered, show markers that are included
