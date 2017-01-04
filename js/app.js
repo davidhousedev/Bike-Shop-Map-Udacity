@@ -258,14 +258,9 @@ function openInfoWindow(placeId) {
         if (placeId == mapMarkers[i].placeId) {
             var marker = mapMarkers[i];
 
-            infoWindowContent = document.createElement('div');
-            infoWindowContent.setAttribute('id', 'info-content');
-            var $title = $(document.createElement('strong'));
-            $title.text(marker.name);
-            var $addr = $(document.createElement('div'));
-            $addr.text(marker.address);
-            infoWindowContent.appendChild($title[0]);
-            infoWindowContent.appendChild($addr[0]);
+            var html = '<strong>' + marker.name + '</strong>';
+            html += '<div>' + marker.address + '</div>';
+            infoWindowContent = html;
 
             infoWindow = new google.maps.InfoWindow({
                 content: infoWindowContent,
@@ -287,35 +282,23 @@ function openInfoWindow(placeId) {
 function updateInfoWindow(content) {
 
     if (content.source === 'google') {
-        var $googleDiv = $(document.createElement('div'));
-        var $hours = $(document.createElement('div'));
-        $hours.text(content.hours);
-        $googleDiv.append($hours);
-
-        var $phone = $(document.createElement('div'));
-        $phone.text(content.phone);
-        $googleDiv.append($phone)
+        var html = '<div>';
+        html += '<div>' + content.hours + '</div>';
+        html += '<div>' + content.phone + '</div>';
 
         if (content.rating) {
-            var $rating = $(document.createElement('div'));
-            $rating.text('Google Rating: ' + content.rating + '/5');
+            html += '<div>Google Rating: ' + content.rating + '/5</div>';
         }
-        $googleDiv.append($rating);
 
         if (content.website) {
-            var $websiteWrapper = $(document.createElement('div'));
-            var $websiteLink = $(document.createElement('a'));
-            $websiteLink.attr('href', content.website);
-            $websiteLink.attr('target', '_blank');  // Open link in new tab
-            $websiteLink.text('website');
-            $websiteWrapper.append($websiteLink);
-            $googleDiv.append($websiteWrapper);
+            html += '<div><a href="' + content.website + '" target="_blank">' +
+                          'website</a></div>';
         }
-
-        // Write new info to map
-        infoWindowContent.appendChild($googleDiv[0]);
+        html += '</div>';
+        infoWindowContent += html;
     }
 
+    // Write new info to map
     infoWindow.setContent(infoWindowContent);
 }
 
