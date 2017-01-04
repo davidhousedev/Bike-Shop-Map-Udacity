@@ -16,7 +16,7 @@ This project is currently live on its [Github Page](https://davidhousedev.github
 
 ### APIs
 * __[Google Maps Javascript API](https://developers.google.com/maps/documentation/javascript/)__ - Creates bike shop map and handles retrieval of shop and elevation information
-* __[New York Times Article Search API](https://developer.nytimes.com/article_search_v2.json)__ - Displays articles from New York Times relevant to bicycling
+* __[Foursquare API](https://developer.foursquare.com/docs/venues/search)__ - Displays twitter and check-in information for individual shops
 
 ### File Directory
 * __js__
