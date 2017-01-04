@@ -280,11 +280,18 @@ function openInfoWindow(placeId) {
 }
 
 function updateInfoWindow(content) {
+    var html;
 
     if (content.source === 'google') {
-        var html = '<div>';
-        html += '<div>' + content.hours + '</div>';
-        html += '<div>' + content.phone + '</div>';
+        html = '<div>';
+
+        if (content.hours) {
+            html += '<div>' + content.hours + '</div>';
+        }
+
+        if (content.phone) {
+            html += '<div>' + content.phone + '</div>';
+        }
 
         if (content.rating) {
             html += '<div>Google Rating: ' + content.rating + '/5</div>';
@@ -295,6 +302,21 @@ function updateInfoWindow(content) {
                           'website</a></div>';
         }
         html += '</div>';
+        infoWindowContent += html;
+    } else if (content.source === 'foursquare') {
+        html = '<div>';
+
+        if (content.usersCount) {
+            html += '<div>Foursquare Visitors: ' + content.usersCount + '</div>';
+        }
+
+        if (content.twitter) {
+            html += '<div>';
+            html += '<a href="https://twitter.com/' + content.twitter + '"' +
+                    'target="_blank">twitter</a>';
+            html += '</div>';
+        }
+
         infoWindowContent += html;
     }
 
@@ -343,7 +365,6 @@ function getFoursquarePlaceDetails(name, address, lat, lng) {
         client_secret: CLIENT_SECRET
     });
 
-    console.log(fullUrl);
 
     var options = {
         success: successCallback,
@@ -383,7 +404,10 @@ function getFoursquarePlaceDetails(name, address, lat, lng) {
             // If result has any useful data, organize it in an object and
             // send result to be added to a map marker
             if (firstResult.stats.usersCount || firstResult.contact.twitter) {
-                var resultData = {};
+                var resultData = {
+                    source: 'foursquare',
+                    status: 'OK'
+                };
                 if (firstResult.stats.usersCount) {
                     console.log(firstResult.stats.usersCount);
                     resultData.usersCount = firstResult.stats.usersCount;
@@ -392,6 +416,9 @@ function getFoursquarePlaceDetails(name, address, lat, lng) {
                     console.log(firstResult.contact.twitter);
                     resultData.twitter = firstResult.contact.twitter;
                 }
+
+                // Send serialized data to info window
+                updateInfoWindow(resultData);
             }
         }
     }
